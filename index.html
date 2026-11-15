@@ -1,509 +1,504 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Concord</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101010">
+<title>Fluxo FPS — Performance e proteção</title>
+
 <style>
-:root{--bg:#fff7ed;--rail:#ea580c;--side:#ffedd5;--ink:#1c1917;--mute:#78716c;--acc:#c2410c;--line:#fed7aa;--in:#fff;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1917;--rail:#9a3412;--side:#292524;--ink:#fafaf9;--mute:#a8a29e;--acc:#fb923c;--line:#44403c;--in:#292524;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1c1917;--rail:#9a3412;--side:#292524;--ink:#fafaf9;--mute:#a8a29e;--acc:#fb923c;--line:#44403c;--in:#292524;color-scheme:dark}
-*{box-sizing:border-box}html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
-#app{display:flex;height:100%}
-#rail{width:64px;background:var(--rail);display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0;overflow-y:auto;flex:none}
-.sv{width:46px;height:46px;border-radius:50%;border:0;background:#fff3;color:#fff;font:600 17px inherit;cursor:pointer;transition:.15s}
-.sv:hover,.sv.on{border-radius:14px;background:#fff;color:var(--acc)}
-#side{width:220px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;flex:none}
-#side h2{margin:0;padding:14px;font-size:16px;border-bottom:1px solid var(--line)}
-#chs{flex:1;overflow-y:auto;padding:8px}
-.ch{display:block;width:100%;text-align:left;border:0;background:none;color:var(--mute);padding:6px 10px;border-radius:6px;cursor:pointer;font:inherit}
-.ch:hover{background:var(--line)}.ch.on{background:var(--line);color:var(--ink);font-weight:600}
-.add{color:var(--acc)!important}
-#me{padding:10px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;font-weight:600}
-#main{flex:1;display:flex;flex-direction:column;min-width:0}
-#top{padding:14px;border-bottom:1px solid var(--line);font-weight:700}
-#msgs{flex:1;overflow-y:auto;padding:12px 16px}
-.m{display:flex;gap:10px;padding:4px 0}.m:hover .del{opacity:1}
-.av{width:38px;height:38px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
-.hd{font-weight:700}.ts{color:var(--mute);font-size:12px;margin-left:6px;font-weight:400}
-.tx{white-space:pre-wrap;word-break:break-word}
-.del{opacity:0;border:0;background:none;color:var(--mute);cursor:pointer;margin-left:6px}
-#typ{height:22px;padding:0 16px;color:var(--mute);font-size:13px;font-style:italic}
-#box{padding:0 16px 14px}
-#inp{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--in);color:var(--ink);font:inherit;resize:none}
-#mem{width:190px;background:var(--side);border-left:1px solid var(--line);padding:12px;overflow-y:auto;flex:none}
-#mem h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;color:var(--mute)}
-.mb{display:flex;align-items:center;gap:8px;padding:4px 0}.mb .av{width:28px;height:28px;font-size:13px}
-.dot{width:8px;height:8px;border-radius:50%;background:#16a34a;margin-left:auto}
-#gate{margin:auto;max-width:360px;text-align:center;padding:24px}
-#gate input,#gate button{padding:10px;font:inherit;border-radius:8px}
-#gate input{border:1px solid var(--line);background:var(--in);color:var(--ink);width:70%}
-#gate button{border:0;background:var(--rail);color:#fff;cursor:pointer}
-.empty{color:var(--mute);text-align:center;margin-top:40px}
-.ov{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
-.bx{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px;width:100%;max-width:380px}
-.bx h3{margin:0 0 12px}.bx>input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--in);color:var(--ink);font:inherit;margin-bottom:12px}
-.lb{font-size:12px;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
-.pl{max-height:200px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:4px 8px;margin-bottom:12px}
-.pr{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer}.pr .av{width:26px;height:26px;font-size:12px}
-.br{display:flex;justify-content:flex-end;gap:8px}.br button{border:0;border-radius:8px;padding:8px 14px;background:var(--rail);color:#fff;cursor:pointer;font:inherit}.br .no{background:var(--line);color:var(--ink)}
-.wb{border:0;background:var(--rail);color:#fff;border-radius:8px;padding:10px 16px;font:inherit;cursor:pointer;margin:6px}
-#svtools{padding:0 8px}
-.av{background-size:cover}.sv{overflow:hidden;padding:0}.mb.off{opacity:.45}
-.fr{margin-bottom:12px}.fr>label{display:block;font-size:12px;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
-.fr input[type=text],.fr textarea,.fr select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--in);color:var(--ink);font:inherit}
-.fr .ck{margin-right:12px;font-size:14px}
-.bx.set{max-width:440px;max-height:90vh;overflow-y:auto}
-.big{width:72px!important;height:72px!important;font-size:28px!important}
-.row2{display:flex;align-items:center;gap:8px;padding:4px 0;flex-wrap:wrap}.row2>span{flex:1}
-.row2 button{border:0;border-radius:6px;padding:4px 8px;background:var(--line);color:var(--ink);cursor:pointer;font:inherit}
-.m.bot .tx{color:var(--mute);font-style:italic}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:60;max-width:90%}
-.vcp{display:flex;align-items:center;gap:6px;padding:2px 10px 2px 22px;font-size:13px;color:var(--mute)}.vcp .av{width:18px;height:18px;font-size:10px}#call{padding:8px 10px;border-top:1px solid var(--line);font-size:13px;display:none}#call b{color:#16a34a}#call button{border:0;border-radius:6px;padding:4px 8px;margin:4px 4px 0 0;cursor:pointer;background:var(--rail);color:#fff;font:inherit}
-@media(max-width:760px){#mem{display:none}#side{width:150px}}
+:root {
+  --bg: #0b0c0e;
+  --panel: #141619;
+  --panel2: #1b1e22;
+  --orange: #ff762e;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --border: #292c31;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+}
+
+header {
+  height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(11,12,14,.96);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -1px;
+}
+
+.logo span { color: var(--orange); }
+
+nav { display: flex; gap: 26px; }
+
+nav a {
+  color: #c7c7cc;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+nav a:hover { color: var(--orange); }
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 19px;
+  background: var(--orange);
+  color: #16100c;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.button:hover {
+  background: #ff945b;
+  transform: translateY(-2px);
+}
+
+.button.secondary {
+  background: transparent;
+  border: 1px solid #45484e;
+  color: white;
+}
+
+main { overflow: hidden; }
+
+.hero {
+  padding: 105px 7% 95px;
+  background:
+    radial-gradient(ellipse at 80% 35%, rgba(255,118,46,.13), transparent 40%),
+    linear-gradient(180deg, #101113, var(--bg));
+}
+
+.eyebrow {
+  color: var(--orange);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 780px;
+  margin: 18px 0;
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -3px;
+}
+
+h1 span { color: var(--orange); }
+
+.hero p {
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 35px;
+  color: #bfc2c8;
+  font-size: 12px;
+}
+
+.status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #ff762e;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #ff762e;
+}
+
+section { padding: 75px 7%; }
+
+.section-head { margin-bottom: 32px; }
+
+h2 {
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+  margin: 10px 0;
+}
+
+.section-head p {
+  color: var(--muted);
+  max-width: 650px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 25px;
+}
+
+.card .icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,118,46,.12);
+  color: var(--orange);
+  border-radius: 10px;
+  font-size: 21px;
+  margin-bottom: 20px;
+}
+
+.card h3 { margin: 0 0 9px; }
+
+.card p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.product {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 30px;
+  align-items: center;
+  background: linear-gradient(135deg, #191b1e, #111214);
+  border: 1px solid #35383d;
+  border-radius: 18px;
+  padding: clamp(24px, 5vw, 48px);
+}
+
+.product-label {
+  color: var(--orange);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+
+.price {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin: 18px 0;
+}
+
+.price small {
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  color: #d2d3d7;
+  font-size: 14px;
+}
+
+.features li { margin: 11px 0; }
+.features li::before {
+  content: "✓";
+  color: var(--orange);
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.product-visual {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid #34373b;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,118,46,.16), transparent 55%),
+    #0d0e10;
+}
+
+.shield {
+  width: 130px;
+  height: 150px;
+  border: 2px solid var(--orange);
+  clip-path: polygon(50% 0, 95% 17%, 87% 69%, 50% 100%, 13% 69%, 5% 17%);
+  display: grid;
+  place-items: center;
+  color: var(--orange);
+  font-size: 48px;
+  filter: drop-shadow(0 0 20px rgba(255,118,46,.4));
+}
+
+.note {
+  margin-top: 16px;
+  color: #92949b;
+  font-size: 12px;
+}
+
+#checkout {
+  background: #101113;
+  border-top: 1px solid var(--border);
+}
+
+.checkout-box {
+  max-width: 650px;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 14px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  margin: 16px 0 7px;
+  color: #d7d7db;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #393c42;
+  border-radius: 8px;
+  background: #0d0e10;
+  color: white;
+  font: inherit;
+}
+
+.checkout-box .button { width: 100%; margin-top: 18px; }
+
+#checkout-message {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  background: #202226;
+  border-radius: 8px;
+  color: #e6e6e8;
+  overflow-wrap: anywhere;
+}
+
+footer {
+  padding: 30px 7%;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media(max-width: 760px) {
+  header { padding: 0 5%; }
+  nav { display: none; }
+  .hero { padding: 75px 6%; }
+  section { padding: 60px 6%; }
+  .grid { grid-template-columns: 1fr; }
+  .product { grid-template-columns: 1fr; }
+  .product-visual { min-height: 200px; }
+  h1 { letter-spacing: -2px; }
+}
 </style>
 </head>
+
 <body>
-<div id="app">
- <div id="rail"></div>
- <div id="side"><h2 id="svn">Concord</h2><button id="inv" class="ch add" style="display:none">+ adicionar pessoas</button><div id="svtools"></div><div id="chs"></div><div id="call"></div><div id="aud" hidden></div><div id="me"></div></div>
- <div id="main">
-  <div id="top"></div><div id="msgs"></div><div id="typ"></div>
-  <div id="box"><textarea id="inp" rows="1" placeholder="Escreva uma mensagem…" disabled></textarea></div>
- </div>
- <div id="mem"></div>
-</div>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<header>
+  <a href="#" class="logo" style="color:white;text-decoration:none">
+    FLUXO<span> FPS</span>
+  </a>
+
+  <nav>
+    <a href="#recursos">Recursos</a>
+    <a href="#anticheat">Anti-cheat</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+
+  <a class="button" href="#anticheat">Conhecer produto</a>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">Desempenho • Tecnologia • Proteção</div>
+    <h1>Seu PC. Seu jogo.<br><span>Seu controle.</span></h1>
+    <p>
+      Uma experiência focada em desempenho, simplicidade e ferramentas
+      para ajudar você a entender melhor seu computador e seus jogos.
+    </p>
+
+    <div class="actions">
+      <a href="#recursos" class="button">Explorar recursos ↗</a>
+      <a href="#anticheat" class="button secondary">Ver anti-cheat</a>
+    </div>
+
+    <div class="status">Interface Fluxo FPS</div>
+  </div>
+
+  <section id="recursos">
+    <div class="section-head">
+      <div class="eyebrow">Plataforma</div>
+      <h2>Informação sem complicação.</h2>
+      <p>Uma interface organizada para apresentar recursos úteis sem sobrecarregar a tela.</p>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <div class="icon">◈</div>
+        <h3>Monitoramento</h3>
+        <p>Área preparada para exibir informações reais de CPU, memória, GPU e utilização do sistema quando conectada a um aplicativo compatível.</p>
+      </article>
+
+      <article class="card">
+        <div class="icon">⌁</div>
+        <h3>Desempenho</h3>
+        <p>Organize indicadores de desempenho e acompanhe os dados disponibilizados pelo programa instalado.</p>
+      </article>
+
+      <article class="card">
+        <div class="icon">⬡</div>
+        <h3>Proteção</h3>
+        <p>Apresentação de ferramentas de segurança, status de licenças e recursos de proteção quando implementados.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="anticheat">
+    <div class="section-head">
+      <div class="eyebrow">Produto</div>
+      <h2>Fluxo Anti-cheat</h2>
+      <p>Confira a oferta e avance para a etapa de pagamento.</p>
+    </div>
+
+    <div class="product">
+      <div>
+        <div class="product-label">FLUXO • ANTI-CHEAT</div>
+        <h2>Uma camada extra de proteção.</h2>
+        <p style="color:var(--muted)">
+          Produto planejado para integrar verificações de segurança.
+          As funcionalidades reais dependem da implementação do software.
+        </p>
+
+        <div class="price">R$ 30,00 <small>/ compra</small></div>
+
+        <ul class="features">
+          <li>Interface de produto dedicada</li>
+          <li>Área preparada para validação de licença</li>
+          <li>Fluxo de compra integrado ao site</li>
+        </ul>
+
+        <a href="#checkout" class="button">Comprar anti-cheat →</a>
+        <p class="note">A compra e o download ainda precisam ser conectados a um sistema real de pagamentos e licenças.</p>
+      </div>
+
+      <div class="product-visual">
+        <div class="shield">⬡</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="section-head">
+      <div class="eyebrow">Nossa proposta</div>
+      <h2>Menos confusão. Mais controle.</h2>
+      <p>O Fluxo FPS foi pensado para apresentar recursos e informações de forma clara, com uma interface leve e organizada.</p>
+    </div>
+  </section>
+
+  <section id="checkout">
+    <div class="checkout-box">
+      <div class="eyebrow">Finalizar compra</div>
+      <h2>Fluxo Anti-cheat</h2>
+      <p style="color:var(--muted)">Valor do produto: <strong style="color:white">R$ 30,00</strong></p>
+
+      <form id="checkout-form">
+        <label for="customer-email">Seu e-mail</label>
+        <input id="customer-email" type="email" placeholder="voce@exemplo.com" required>
+
+        <label for="payment-method">Forma de pagamento</label>
+        <select id="payment-method" required>
+          <option value="">Escolha uma opção</option>
+          <option value="pix">Pix</option>
+          <option value="card">Cartão</option>
+        </select>
+
+        <button type="submit" class="button">Continuar</button>
+      </form>
+
+      <div id="checkout-message" role="status"></div>
+      <p class="note">
+        Esta demonstração não processa cobranças. Não insira dados de cartão
+        aqui. Para vender de verdade, conecte um provedor de pagamentos seguro.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div><strong style="color:white">FLUXO<span style="color:var(--orange)"> FPS</span></strong></div>
+  <div>Interface demonstrativa • Fluxo FPS</div>
+  <div>© <span id="year"></span> Fluxo FPS</div>
+</footer>
+
 <script>
-/* COLE AQUI a configuração do seu projeto Firebase (Configurações do projeto > Seus apps > Web) */
-const FIREBASE_CONFIG={
-  apiKey:"AIzaSyC3izZ6dniUydPf-w_lxqUekRzF-cjdTbg",            // <- ÚNICO valor que falta: começa com AIza...
-  authDomain:"concord-2911d.firebaseapp.com",
-  projectId:"concord-2911d",
-  storageBucket:"concord-2911d.firebasestorage.app",
-  messagingSenderId:"264455462133",
-  appId:"1:264455462133:web:bc4b55d1e79e46a4f839bc"
-};
-/* Cole aqui o(s) seu(s) ID(s) de admin (botão 🆔 no canto inferior esquerdo do app). Admin vê e modera todos os servidores. */
-const ADMIN_UIDS=["COLE_SEU_ID_AQUI"];
-const $=s=>document.querySelector(s);
-const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
-let vc=null,vcn='',stream=null,muted=false,pcs={},myPeer=null;
-let db,room,me=null,servers=[],channels=[],msgs=[],users={},peers=[],sv=null,ch=null,unCh=null,unMsg=null,lastPres=0,typT=null;
-const nm=id=>(users[id]&&users[id].nick)||'Anônimo';
-const hue=s=>{let h=0;for(const c of s||'')h=(h*31+c.charCodeAt(0))%360;return h};
-const av=(id,nc)=>{const u=users[id]||{},a=el('div','av',u.avatar?'':nm(id)[0].toUpperCase());a.style.background=u.avatar?'url("'+u.avatar+'") center/cover':'hsl('+hue(id)+' 60% 42%)';if(!nc){a.style.cursor='pointer';a.onclick=()=>showProfile(id)}return a};
-const hm=t=>new Date(t).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+document.getElementById("year").textContent = new Date().getFullYear();
 
-function gate(msg,ask){
-  const g=el('div');g.id='gate';g.append(el('h1',null,'Concord'),el('p',null,msg));
-  if(ask){const i=el('input');i.placeholder='Seu apelido';i.maxLength=24;const b=el('button',null,'Entrar');
-    const go=async()=>{const v=i.value.trim();if(!v)return;const bl=checkText(v);if(bl){toast(BOTS[bl.bot].n+' bloqueou esse apelido.');return}try{await db.doc('users/'+me).set({nick:v})}catch(e){fail('apelido',e);return}g.remove();$('#app').style.display='flex'};
-    b.onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};g.append(i,' ',b);}
-  $('#app').style.display='none';document.body.append(g);
-}
+const form = document.getElementById("checkout-form");
+const message = document.getElementById("checkout-message");
 
-async function init(){
-  try{
-    if(FIREBASE_CONFIG.apiKey.startsWith('COLE')){gate('Falta configurar o Firebase: abra o index.html e cole a configuração do seu projeto no topo do script.');return}
-    firebase.initializeApp(FIREBASE_CONFIG);
-    me=(await firebase.auth().signInAnonymously()).user.uid;
-    db=firebase.firestore();room=mkRoom(db,me);
-  }catch(e){console.error(e);gate('Erro ao conectar no Firebase: '+(e.code||e.message));return}
-  if(!db||!me){gate('Não foi possível conectar ao servidor.');return}
-  const to=setTimeout(()=>{$('#msgs').replaceChildren(el('div','empty','Conexão lenta ou sem permissão de escrita. Verifique seu nível de acesso.'))},10000);
-  db.collection('users').onSnapshot(s=>{users={};s.docs.forEach(d=>users[d.id]=d.data());
-    if(!users[me]&&!$('#gate'))gate('Escolha um apelido para começar. Aviso: as mensagens são verificadas automaticamente por bots de moderação.',true);renderAll();handleInvite()},e=>fail('usuários',e));
-  db.collection('mutes').onSnapshot(q=>{mutes={};q.docs.forEach(d=>mutes[d.id]=d.data().until||0);
-    if((mutes[me]||0)>Date.now())toast('👮 ModBot: você está silenciado até '+new Date(mutes[me]).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'.')},()=>{});
-  db.collection('strikes').orderBy('ts','desc').limit(200).onSnapshot(q=>{
-    const now=Date.now(),c={};q.docs.forEach(d=>{const x=d.data();if(now-x.ts<600000)c[x.uid]=(c[x.uid]||0)+1});
-    Object.keys(c).forEach(u=>{if(c[u]>=3&&(mutes[u]||0)<now)db.doc('mutes/'+u).set({until:now+600000,by:me,why:'3 infrações em 10 min'}).catch(()=>{})})},()=>{});
-  (ADMIN_UIDS.includes(me)?db.collection('servers'):db.collection('servers').where('members','array-contains',me)).onSnapshot(s=>{clearTimeout(to);servers=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>ADMIN_UIDS.includes(me)||(x.members||[]).includes(me)).sort((a,b)=>a.ts-b.ts);
-    if(sv&&!servers.find(x=>x.id===sv)){sv=null;ch=null;channels=[];msgs=[];if(unCh){unCh();unCh=null}if(unMsg){unMsg();unMsg=null}$('#inp').disabled=true;$('#top').textContent=''}
-    if(!sv&&servers.length)pickSv(servers[0].id);renderRail();if(!servers.length)welcome()},e=>fail('servidores',e));
-  if(room){room.onPeers(c=>{peers=c.peers;const mp=peers.find(p=>p.isMe);if(mp)myPeer=mp.peer;syncCall();renderCh();renderMem();renderTyp()},()=>{});room.on('rtc',onRtc,()=>{});setInterval(renderTyp,1000)}
-  $('#inp').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}};
-  $('#inp').oninput=typing;
-}
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
 
-function pickSv(id){
-  sv=id;ch=null;channels=[];msgs=[];if(unCh)unCh();if(unMsg){unMsg();unMsg=null}
-  unCh=db.collection('servers/'+id+'/channels').onSnapshot(s=>{
-    channels=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.ts-b.ts);
-    if(!ch||!channels.find(c=>c.id===ch)){const t=channels.find(x=>x.type!=='voice');if(t)pickCh(t.id)}renderCh()},e=>fail('canais',e));
-  renderRail();
-}
-function pickCh(id){
-  ch=id;if(unMsg)unMsg();msgs=[];
-  unMsg=db.collection('servers/'+sv+'/channels/'+id+'/messages').orderBy('ts','desc').limit(100).onSnapshot(s=>{
-    msgs=s.docs.map(d=>({id:d.id,...d.data()})).reverse();renderMsgs();scanMsgs()},e=>fail('mensagens',e));
-  $('#inp').disabled=false;presence();renderCh();renderMem();
-}
+  const email = document.getElementById("customer-email").value.trim();
+  const method = document.getElementById("payment-method").value;
 
-async function mkServer(){
-  const q=await modal({title:'Criar servidor',ph:'Nome do servidor',people:true,ok:'Criar'});if(!q)return;
-  const r=await db.collection('servers').add({name:q.name.slice(0,30),owner:me,members:[me,...q.sel],ts:Date.now()});
-  await db.collection('servers/'+r.id+'/channels').add({name:'geral',ts:Date.now()});
-  pickSv(r.id);
-}
-async function mkChannel(voice){
-  if(!sv)return;const q=await modal({title:voice===true?'Novo canal de voz':'Novo canal de texto',ph:'nome-do-canal',ok:'Criar'});if(!q)return;const n=q.name.toLowerCase().replace(/\s+/g,'-');
-  const r=await db.collection('servers/'+sv+'/channels').add({name:n.slice(0,30),ts:Date.now(),type:voice===true?'voice':'text'});if(voice!==true)pickCh(r.id);
-}
-async function send(){
-  const i=$('#inp'),t=i.value.trim();if(!t||!ch)return;const blk=preSend(t);if(blk){toast(blk);return}i.value='';
-  clearTimeout(typT);presence(false);
-  try{await db.collection('servers/'+sv+'/channels/'+ch+'/messages').add({uid:me,text:t.slice(0,2000),ts:Date.now()})}
-  catch(e){i.value=t;fail('envio',e)}
-}
-function presence(typ){
-  if(!room)return;
-  room.presence({sv:sv,ch:ch,vc:vc,typing:typ?Date.now():null}).catch(()=>{});
-}
-function typing(){
-  if(Date.now()-lastPres>2000){lastPres=Date.now();presence(true)}
-  clearTimeout(typT);typT=setTimeout(()=>presence(false),3500);
-}
-
-function renderAll(){renderRail();renderCh();renderMsgs();renderMem();renderMe()}
-function renderMe(){const m=$('#me');if(!me||!users[me]){m.replaceChildren();return}const idb=el('button','ch','🆔');idb.title='Copiar meu ID (usado para ser admin)';idb.style.cssText='width:auto;margin-left:auto';idb.onclick=async()=>{try{await navigator.clipboard.writeText(me);toast('ID copiado: '+me)}catch(e){toast('Seu ID: '+me)}};const cfg=el('button','ch','⚙');cfg.title='Configurações do usuário';cfg.style.width='auto';cfg.onclick=userSettings;m.replaceChildren(av(me),el('span',null,nm(me)),idb,cfg)}
-function renderRail(){
-  const r=$('#rail');r.replaceChildren();
-  servers.forEach(s=>{const o=s.dm?(s.members||[]).find(x=>x!==me):null,n=s.dm?nm(o):s.name;
-    const b=el('button','sv'+(s.id===sv?' on':''),(n||'?')[0].toUpperCase());b.title=n;
-    const ic=s.dm?(users[o]&&users[o].avatar):s.icon;if(ic){b.textContent='';b.style.background='url("'+ic+'") center/cover'}
-    b.onclick=()=>pickSv(s.id);r.append(b)});
-  const a=el('button','sv','+');a.title='Criar servidor';a.onclick=mkServer;r.append(a);
-  const j=el('button','sv','🔗');j.title='Entrar com convite';j.onclick=askInvite;r.append(j);
-  const cur=servers.find(s=>s.id===sv);$('#svn').textContent=cur?(cur.dm?'💬 '+nm((cur.members||[]).find(x=>x!==me)):cur.name):'Concord';$('#inv').style.display=cur&&!cur.dm&&(cur.owner===me||ADMIN_UIDS.includes(me))?'block':'none';renderTools();
-}
-function renderCh(){
-  const c=$('#chs');c.replaceChildren();
-  if(sv){channels.forEach(x=>{
-    if(x.type==='voice'){const vb=el('button','ch'+(x.id===vc?' on':''),'🔊 '+x.name);vb.onclick=()=>joinCall(x.id,x.name);c.append(vb);
-      const seen=new Set();peers.filter(p=>p.by&&p.presence&&p.presence.vc===x.id&&!seen.has(p.peer)&&seen.add(p.peer)).forEach(p=>{const r=el('div','vcp');r.append(av(p.by),el('span',null,nm(p.by)));c.append(r)});return}
-    const b=el('button','ch'+(x.id===ch?' on':''),'# '+x.name);b.onclick=()=>pickCh(x.id);c.append(b)});
-    const a=el('button','ch add','+ canal de texto');a.onclick=()=>mkChannel(false);c.append(a);
-    const v=el('button','ch add','+ canal de voz');v.onclick=()=>mkChannel(true);c.append(v)}
-  const cur=channels.find(x=>x.id===ch);$('#top').textContent=cur?'# '+cur.name:'';
-}
-function renderMsgs(){
-  const box=$('#msgs'),stick=box.scrollTop+box.clientHeight>=box.scrollHeight-60;
-  box.replaceChildren();
-  if(!msgs.length){box.append(el('div','empty','Nenhuma mensagem ainda. Diga olá!'));return}
-  msgs.forEach(m=>{
-    const row=el('div','m'+(m.bot?' bot':'')),body=el('div'),hd=el('div','hd',m.bot||nm(m.uid));
-    hd.append(el('span','ts',hm(m.ts)));
-    if(m.uid===me){const e=el('button','del','editar');e.onclick=()=>editMsg(m);hd.append(e)}
-    if(m.uid===me||canMod()){const d=el('button','del','apagar');d.onclick=()=>db.doc('servers/'+sv+'/channels/'+ch+'/messages/'+m.id).delete().catch(()=>{});hd.append(d)}
-    body.append(hd,el('div','tx',m.text+(m.edited?' (editada)':'')));row.append(m.bot?botAv():av(m.uid),body);box.append(row)});
-  if(stick)box.scrollTop=box.scrollHeight;
-}
-function renderMem(){
-  const m=$('#mem');m.replaceChildren();const cur=servers.find(x=>x.id===sv);
-  const online=new Set();peers.forEach(p=>{if(p.by&&stOf(p.by)!=='invisible')online.add(p.by)});
-  const all=cur?(cur.members||[]):[],on=all.filter(id=>online.has(id)),off=all.filter(id=>!online.has(id));
-  const row=id=>{const r=el('div','mb'+(online.has(id)?'':' off'));r.append(av(id),el('span',null,nm(id)));
-    if(online.has(id)){const d=el('span','dot');d.style.background=ST[stOf(id)].c;r.append(d)}return r};
-  m.append(el('h3',null,'Online — '+on.length));on.forEach(id=>m.append(row(id)));
-  m.append(el('h3',null,'Offline — '+off.length));off.forEach(id=>m.append(row(id)));
-  m.append(el('h3',null,'Bots ativos'));['🛡️ AntiSpam','🎣 ScamBot','🔐 PrivacyBot','🤬 ToxicBot','👮 ModBot'].forEach(b=>m.append(el('div','mb',b)));
-}
-function renderTyp(){
-  const names=[...new Set(peers.filter(p=>!p.isMe&&p.by&&p.presence&&p.presence.ch===ch&&p.presence.typing&&Date.now()-p.presence.typing<5000).map(p=>nm(p.by)))];
-  $('#typ').textContent=!names.length?'':names.length===1?names[0]+' está digitando…':names.length===2?names.join(' e ')+' estão digitando…':'Várias pessoas estão digitando…';
-}
-/* ===== Janelas (prompt/alert nativos são bloqueados no artefato) ===== */
-function toast(t){const d=el('div','toast',t);document.body.append(d);setTimeout(()=>d.remove(),4500)}
-window.alert=toast;
-function modal(o){return new Promise(res=>{
-  const ov=el('div','ov'),bx=el('div','bx');ov.append(bx);bx.append(el('h3',null,o.title));
-  let inp=null;if(o.ph){inp=el('input');inp.type='text';inp.placeholder=o.ph;inp.maxLength=o.max||30;if(o.val)inp.value=o.val;bx.append(inp)}
-  const sel=new Set(o.sel||[]);
-  if(o.people){bx.append(el('div','lb','Adicionar pessoas'));const l=el('div','pl');
-    const ids=Object.keys(users).filter(id=>id!==me);
-    if(!ids.length)l.append(el('div','empty','Ninguém mais entrou ainda. Quem abrir o Concord e escolher um apelido aparece aqui.'));
-    ids.forEach(id=>{const r=el('label','pr'),c=el('input');c.type='checkbox';c.checked=sel.has(id);c.onchange=()=>{c.checked?sel.add(id):sel.delete(id)};r.append(c,av(id,1),el('span',null,nm(id)));l.append(r)});bx.append(l)}
-  const row=el('div','br'),no=el('button','no','Cancelar'),ok=el('button',null,o.ok||'Criar');
-  const done=v=>{ov.remove();res(v)};
-  no.onclick=()=>done(null);
-  ok.onclick=()=>{const n=inp?inp.value.trim():'';if(inp&&!n){inp.focus();return}done({name:n,sel:[...sel]})};
-  ov.onclick=e=>{if(e.target===ov)done(null)};
-  if(inp)inp.onkeydown=e=>{if(e.key==='Enter')ok.click()};
-  row.append(no,ok);bx.append(row);document.body.append(ov);if(inp)inp.focus();
-})}
-$('#inv').onclick=async()=>{
-  const cur=servers.find(s=>s.id===sv);if(!cur)return;
-  const q=await modal({title:'Pessoas em '+cur.name,people:true,sel:(cur.members||[]).filter(x=>x!==cur.owner),ok:'Salvar'});
-  if(q)db.doc('servers/'+sv).update({members:[...new Set([cur.owner,...q.sel])]}).catch(()=>toast('Não foi possível salvar.'));
-};
-/* ===== Voz (WebRTC em malha, sinalização via room) ===== */
-const ICE=[{urls:'stun:stun.l.google.com:19302'}];
-async function joinCall(id,name){
-  if(!room){alert('Chamadas indisponíveis nesta sessão.');return}
-  if(vc===id)return;
-  if(vc)leaveCall();
-  try{stream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:VS.mic?{exact:VS.mic}:undefined,echoCancellation:VS.echo!==false,noiseSuppression:VS.ns!==false}})}
-  catch(e){alert('Não consegui acessar o microfone. O navegador, ou o próprio claude.ai, pode estar bloqueando.');return}
-  vc=id;vcn=name;muted=false;presence(false);renderCh();renderCall();syncCall();
-}
-function leaveCall(){
-  Object.keys(pcs).forEach(closePc);
-  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
-  vc=null;presence(false);renderCh();renderCall();
-}
-function closePc(k){const o=pcs[k];if(!o)return;try{o.pc.close()}catch(e){}if(o.au)o.au.remove();delete pcs[k]}
-function mkPc(k){
-  if(pcs[k])return pcs[k].pc;
-  const pc=new RTCPeerConnection({iceServers:ICE}),o={pc,au:null};pcs[k]=o;
-  stream.getTracks().forEach(t=>pc.addTrack(t,stream));
-  pc.ontrack=e=>{if(!o.au){o.au=document.createElement('audio');o.au.autoplay=true;$('#aud').append(o.au)}o.au.volume=(VS.vol==null?100:VS.vol)/100;o.au.muted=deaf;o.au.srcObject=e.streams[0]};
-  pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')closePc(k)};
-  return pc;
-}
-const gathered=pc=>new Promise(r=>{if(pc.iceGatheringState==='complete')return r();
-  const f=()=>{if(pc.iceGatheringState==='complete'){pc.removeEventListener('icegatheringstatechange',f);r()}};
-  pc.addEventListener('icegatheringstatechange',f);setTimeout(r,3500)});
-async function connect(k){
-  const pc=mkPc(k);
-  try{await pc.setLocalDescription(await pc.createOffer());await gathered(pc);
-    room.emit('rtc',{to:k,t:'offer',sdp:pc.localDescription.sdp}).catch(()=>{})}catch(e){closePc(k);return}
-  setTimeout(()=>{const o=pcs[k];if(o&&o.pc===pc&&pc.connectionState!=='connected'){closePc(k);syncCall()}},9000);
-}
-async function onRtc(m){
-  const d=m.data;if(!d||m.isMe||d.to!==myPeer||!vc||!stream)return;
-  const k=m.peer;
-  try{
-    if(d.t==='offer'){
-      closePc(k);const pc=mkPc(k);
-      await pc.setRemoteDescription({type:'offer',sdp:d.sdp});
-      await pc.setLocalDescription(await pc.createAnswer());await gathered(pc);
-      room.emit('rtc',{to:k,t:'answer',sdp:pc.localDescription.sdp}).catch(()=>{});
-    }else if(d.t==='answer'&&pcs[k]){await pcs[k].pc.setRemoteDescription({type:'answer',sdp:d.sdp})}
-  }catch(e){closePc(k)}
-}
-function syncCall(){
-  if(vc&&myPeer&&stream){
-    const alive=peers.filter(p=>!p.isMe&&p.presence&&p.presence.vc===vc).map(p=>p.peer);
-    Object.keys(pcs).forEach(k=>{if(!alive.includes(k))closePc(k)});
-    alive.forEach(k=>{if(!pcs[k]&&myPeer>k)connect(k)}); /* quem tem id maior inicia */
+  if (!email || !method) {
+    return;
   }
-  renderCall();
-}
-function renderCall(){
-  const c=$('#call');if(!vc){c.style.display='none';return}
-  c.style.display='block';c.replaceChildren(el('b',null,'● Voz conectada'),el('div',null,vcn));
-  const mb=el('button',null,muted?'Ativar mic':'Mutar');
-  mb.onclick=()=>{muted=!muted;stream.getAudioTracks().forEach(t=>t.enabled=!muted);renderCall()};
-  const lb=el('button',null,'Sair');lb.onclick=leaveCall;
-  const dfb=el('button',null,deaf?'Ouvir':'Ensurdecer');
-  dfb.onclick=()=>{deaf=!deaf;Object.values(pcs).forEach(o=>{if(o.au)o.au.muted=deaf});if(deaf&&!muted){muted=true;stream.getAudioTracks().forEach(t=>t.enabled=false)}renderCall()};
-  c.append(mb,dfb,lb);
-}
-/* ===== Convites, servidores e moderação ===== */
-/* ===== Perfil, configurações, DMs e servidor ===== */
-const fail=(w,e)=>{console.error(w,e);toast('⚠ '+w+': '+((e&&e.code)||(e&&e.message)||e))};
-const ST={online:{n:'Online',c:'#16a34a'},idle:{n:'Ausente',c:'#eab308'},dnd:{n:'Não perturbe',c:'#dc2626'},invisible:{n:'Invisível',c:'#9ca3af'}};
-let deaf=false,VS={};
-try{VS=JSON.parse(localStorage.getItem('cc_voice')||'{}')}catch(e){}
-function setTheme(t){try{localStorage.setItem('cc_theme',t)}catch(e){}if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t)}
-try{const t0=localStorage.getItem('cc_theme');if(t0&&t0!=='auto')document.documentElement.setAttribute('data-theme',t0)}catch(e){}
-const stOf=id=>(users[id]&&users[id].status)||'online';
-const fr=(label,ctl)=>{const d=el('div','fr');d.append(el('label',null,label),ctl);return d};
-function resizeImg(file,size){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
-  img.onload=()=>{const c=document.createElement('canvas');c.width=c.height=size;const m=Math.min(img.width,img.height);
-    c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,size,size);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',0.8))};
-  img.onerror=()=>rej(new Error('imagem inválida'));img.src=u})}
-function overlay(){const ov=el('div','ov'),bx=el('div','bx set');ov.append(bx);ov.onclick=e=>{if(e.target===ov)ov.remove()};document.body.append(ov);return{ov,bx}}
-function btns(ov,okTxt,okFn){const row=el('div','br'),x=el('button','no','Fechar'),o=el('button',null,okTxt);x.onclick=()=>ov.remove();o.onclick=okFn;row.append(x,o);return row}
 
-function userSettings(){
-  const {ov,bx}=overlay(),u=users[me]||{};let avatar=u.avatar||null;
-  bx.append(el('h3',null,'Configurações do usuário'));
-  const pv=el('div','av big'),paint=()=>{pv.textContent=avatar?'':nm(me)[0].toUpperCase();pv.style.background=avatar?'url("'+avatar+'") center/cover':'hsl('+hue(me)+' 60% 42%)'};paint();
-  const file=el('input');file.type='file';file.accept='image/*';
-  file.onchange=async()=>{if(!file.files[0])return;try{avatar=await resizeImg(file.files[0],96);paint()}catch(e){toast('Imagem inválida.')}};
-  const rm=el('button',null,'Remover');rm.onclick=()=>{avatar=null;paint()};
-  const r1=el('div','row2');r1.append(pv,file,rm);bx.append(fr('Foto de perfil',r1));
-  const ni=el('input');ni.type='text';ni.maxLength=24;ni.value=u.nick||'';bx.append(fr('Apelido',ni));
-  const bi=el('textarea');bi.rows=3;bi.maxLength=190;bi.value=u.bio||'';bx.append(fr('Sobre mim',bi));
-  const st=el('select');Object.keys(ST).forEach(k=>{const o=el('option',null,ST[k].n);o.value=k;if(k===(u.status||'online'))o.selected=true;st.append(o)});bx.append(fr('Status',st));
-  let t0='auto';try{t0=localStorage.getItem('cc_theme')||'auto'}catch(e){}
-  const th=el('select');[['auto','Automático'],['light','Claro'],['dark','Escuro']].forEach(p=>{const o=el('option',null,p[1]);o.value=p[0];if(p[0]===t0)o.selected=true;th.append(o)});bx.append(fr('Tema',th));
-  const mic=el('select'),o0=el('option',null,'Padrão do sistema');o0.value='';mic.append(o0);
-  if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices)navigator.mediaDevices.enumerateDevices().then(ds=>ds.filter(d=>d.kind==='audioinput'&&d.deviceId&&d.deviceId!=='default').forEach(d=>{const o=el('option',null,d.label||'Microfone');o.value=d.deviceId;if(d.deviceId===VS.mic)o.selected=true;mic.append(o)})).catch(()=>{});
-  bx.append(fr('Microfone (vale na próxima chamada)',mic));
-  const ns=el('input'),ec=el('input');ns.type=ec.type='checkbox';ns.checked=VS.ns!==false;ec.checked=VS.echo!==false;
-  const l1=el('label','ck',' Supressão de ruído'),l2=el('label','ck',' Cancelamento de eco');l1.prepend(ns);l2.prepend(ec);
-  const r2=el('div','row2');r2.append(l1,l2);bx.append(fr('Qualidade da voz',r2));
-  const vol=el('input');vol.type='range';vol.min=0;vol.max=100;vol.value=VS.vol==null?100:VS.vol;bx.append(fr('Volume das outras pessoas',vol));
-  bx.append(btns(ov,'Salvar',async()=>{
-    const nick=ni.value.trim();if(!nick){ni.focus();return}
-    const bl=checkText(nick)||checkText(bi.value);if(bl){toast(BOTS[bl.bot].n+' bloqueou: '+bl.why+'.');return}
-    const d={nick:nick.slice(0,24),bio:bi.value.trim().slice(0,190),status:st.value};if(avatar)d.avatar=avatar;
-    try{await db.doc('users/'+me).set(d)}catch(e){fail('perfil',e);return}
-    VS={mic:mic.value,echo:ec.checked,ns:ns.checked,vol:+vol.value};try{localStorage.setItem('cc_voice',JSON.stringify(VS))}catch(e){}
-    Object.values(pcs).forEach(o=>{if(o.au)o.au.volume=VS.vol/100});setTheme(th.value);ov.remove();toast('Configurações salvas.')}));
-}
-function showProfile(id){
-  const {ov,bx}=overlay(),u=users[id]||{},a=av(id,1);a.classList.add('big');
-  bx.append(a,el('h3',null,nm(id)),el('div','lb','● '+ST[u.status||'online'].n));
-  if(u.bio)bx.append(el('div','tx',u.bio));
-  const row=el('div','br');
-  if(id!==me){const b=el('button',null,'💬 Mensagem direta');b.onclick=()=>{ov.remove();openDm(id)};row.append(b)}
-  const x=el('button','no','Fechar');x.onclick=()=>ov.remove();row.prepend(x);bx.append(row);
-}
-async function openDm(other){
-  const id='dm'+[me,other].sort().join('');
-  try{
-    const d=await db.doc('servers/'+id).get();
-    if(!d.exists){
-      await db.doc('servers/'+id).set({name:'dm',owner:me,members:[me,other],dm:true,ts:Date.now()});
-      await db.collection('servers/'+id+'/channels').add({name:'conversa',ts:Date.now()});
-      await db.collection('servers/'+id+'/channels').add({name:'call',ts:Date.now()+1,type:'voice'});
-    }
-    pickSv(id);
-  }catch(e){fail('mensagem direta',e)}
-}
-async function editMsg(m){
-  const q=await modal({title:'Editar mensagem',ph:'Mensagem',val:m.text,max:2000,ok:'Salvar'});if(!q||q.name===m.text)return;
-  const bl=checkText(q.name);if(bl){toast(BOTS[bl.bot].n+' bloqueou: '+bl.why+'.');return}
-  db.doc('servers/'+sv+'/channels/'+ch+'/messages/'+m.id).update({text:q.name.slice(0,2000),edited:true}).catch(e=>fail('editar',e));
-}
-function serverSettings(cur){
-  const {ov,bx}=overlay();let icon=cur.icon||null,rmIcon=false;
-  bx.append(el('h3',null,'Configurações do servidor'));
-  const ni=el('input');ni.type='text';ni.maxLength=30;ni.value=cur.name;bx.append(fr('Nome do servidor',ni));
-  const file=el('input');file.type='file';file.accept='image/*';
-  file.onchange=async()=>{if(!file.files[0])return;try{icon=await resizeImg(file.files[0],64);rmIcon=false;toast('Ícone pronto. Clique em Salvar.')}catch(e){toast('Imagem inválida.')}};
-  const rm=el('button',null,'Remover ícone');rm.onclick=()=>{icon=null;rmIcon=true;toast('O ícone será removido ao salvar.')};
-  const r1=el('div','row2');r1.append(file,rm);bx.append(fr('Ícone',r1));
-  const ml=el('div');(cur.members||[]).forEach(id=>{
-    const r=el('div','row2');r.append(av(id,1),el('span',null,nm(id)+(id===cur.owner?' 👑':'')));
-    if(id!==cur.owner){const b=el('button',null,'Remover');b.onclick=async()=>{try{await db.doc('servers/'+cur.id).update({members:firebase.firestore.FieldValue.arrayRemove(id)});ov.remove();toast(nm(id)+' foi removido.')}catch(e){fail('remover',e)}};r.append(b)}
-    ml.append(r)});bx.append(fr('Membros',ml));
-  const cl=el('div');channels.forEach(c=>{
-    const r=el('div','row2');r.append(el('span',null,(c.type==='voice'?'🔊 ':'# ')+c.name));
-    const rn=el('button',null,'Renomear');rn.onclick=async()=>{const q=await modal({title:'Renomear canal',ph:'nome-do-canal',val:c.name,ok:'Salvar'});if(q)db.doc('servers/'+cur.id+'/channels/'+c.id).update({name:q.name.toLowerCase().replace(/\s+/g,'-')}).catch(e=>fail('renomear',e))};
-    const dl=el('button',null,'Excluir');dl.onclick=async()=>{const q=await modal({title:'Excluir o canal “'+c.name+'”?',ok:'Excluir'});if(q)db.doc('servers/'+cur.id+'/channels/'+c.id).delete().catch(e=>fail('excluir canal',e))};
-    r.append(rn,dl);cl.append(r)});bx.append(fr('Canais',cl));
-  bx.append(btns(ov,'Salvar',async()=>{
-    const d={name:ni.value.trim().slice(0,30)||cur.name};
-    if(icon)d.icon=icon;else if(rmIcon)d.icon=firebase.firestore.FieldValue.delete();
-    try{await db.doc('servers/'+cur.id).update(d);ov.remove();toast('Servidor atualizado.')}catch(e){fail('salvar servidor',e)}}));
-}
-let pendingInvite=(location.hash.match(/^#c\/([A-Za-z0-9]+)/)||[])[1]||null;
-const canMod=()=>{const c=servers.find(x=>x.id===sv);return !!c&&(c.owner===me||ADMIN_UIDS.includes(me))};
-function handleInvite(){if(!pendingInvite||!users[me])return;const id=pendingInvite;pendingInvite=null;history.replaceState(null,'',location.pathname+location.search);joinById(id)}
-async function joinById(raw){
-  const m=String(raw).trim().match(/#c\/([A-Za-z0-9]+)|^([A-Za-z0-9]{10,})$/),id=m&&(m[1]||m[2]);
-  if(!id){toast('Convite inválido.');return}
-  let d;try{d=await db.doc('servers/'+id).get()}catch(e){toast('Convite inválido ou servidor inexistente.');return}
-  if(!d.exists){toast('Esse servidor não existe mais.');return}
-  const sd=d.data();
-  if((sd.members||[]).includes(me)){pickSv(id);return}
-  const q=await modal({title:'Entrar em “'+sd.name+'”?',ok:'Entrar'});if(!q)return;
-  try{await db.doc('servers/'+id).update({members:firebase.firestore.FieldValue.arrayUnion(me)});pickSv(id);toast('Você entrou em '+sd.name+'.')}
-  catch(e){toast('Não foi possível entrar neste servidor.')}
-}
-async function askInvite(){const q=await modal({title:'Entrar com convite',ph:'Cole o link ou o código do convite',max:300,ok:'Entrar'});if(q)joinById(q.name)}
-function welcome(){
-  const w=el('div','empty');w.append(el('p',null,'Você ainda não está em nenhum servidor.'));
-  const a=el('button','wb','➕ Criar servidor');a.onclick=mkServer;
-  const c=el('button','wb','🔗 Entrar com convite');c.onclick=askInvite;
-  w.append(a,c);$('#msgs').replaceChildren(w);
-}
-function showInvite(cur){
-  const link=location.origin+location.pathname+'#c/'+cur.id;
-  const ov=el('div','ov'),bx=el('div','bx');ov.append(bx);
-  bx.append(el('h3',null,'Convidar para '+cur.name),el('div','lb','Quem tiver este link consegue entrar'));
-  const i=el('input');i.type='text';i.readOnly=true;i.value=link;bx.append(i);
-  const row=el('div','br'),c=el('button',null,'Copiar link'),x=el('button','no','Fechar');
-  c.onclick=async()=>{try{await navigator.clipboard.writeText(link)}catch(e){i.select();document.execCommand('copy')}toast('Link copiado!')};
-  x.onclick=()=>ov.remove();ov.onclick=e=>{if(e.target===ov)ov.remove()};
-  row.append(x,c);bx.append(row);document.body.append(ov);i.select();
-}
-async function leaveServer(){
-  const cur=servers.find(x=>x.id===sv);if(!cur)return;
-  const q=await modal({title:'Sair de “'+cur.name+'”?',ok:'Sair'});if(!q)return;
-  db.doc('servers/'+sv).update({members:firebase.firestore.FieldValue.arrayRemove(me)}).catch(()=>toast('Não foi possível sair.'));
-}
-async function delServer(){
-  const cur=servers.find(x=>x.id===sv);if(!cur)return;
-  const q=await modal({title:'Excluir “'+cur.name+'” para todos?',ok:'Excluir'});if(!q)return;
-  db.doc('servers/'+sv).delete().catch(()=>toast('Não foi possível excluir.'));
-}
-function renderTools(){
-  const t=$('#svtools');t.replaceChildren();const cur=servers.find(x=>x.id===sv);if(!cur)return;
-  const mk=(txt,fn)=>{const b=el('button','ch add',txt);b.onclick=fn;t.append(b)};
-  if(cur.dm){mk('↩ Sair da conversa',leaveServer);return}
-  if(canMod())mk('⚙ Configurações do servidor',()=>serverSettings(cur));
-  mk('🔗 Convidar por link',()=>showInvite(cur));
-  if(cur.owner!==me&&(cur.members||[]).includes(me))mk('↩ Sair do servidor',leaveServer);
-  if(canMod())mk('🗑 Excluir servidor',delServer);
-}
-/* ===== Bots de moderação =====
-let mutes={};const scanned=new Set();
-const BOTS={spam:{n:'🛡️ AntiSpam'},scam:{n:'🎣 ScamBot'},priv:{n:'🔐 PrivacyBot'},tox:{n:'🤬 ToxicBot'}};
-const RX={
-  scam:/(free\s*robux|robux\s*gr[aá]tis|gerador\s*de\s*robux|robux\s*de\s*gra[cç]a|discord\.gg\/|discord(app)?\.com\/invite|bit\.ly|tinyurl|t\.me\/|grabify|iplogger|rbxfree)/i,
-  priv:/(\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b|\b(?:\d[ -]?){13,16}\b|[\w.+-]+@[\w-]+\.[\w.]+|\(?\b\d{2}\)?\s?9?\d{4}-?\d{4}\b|(senha|password)\s*(é|:|=))/i,
-  tox:/(\bvai\s*(tomar|toma)\s*n[oa]\s*(cu|cú|c\*|c#|rabo)|\bvai\s*(se\s*)?(foder|fuder)|\bvai\s*(pra|para|pro)\s*(a\s*)?(casa\s*d[oa]\s*)?(caralh[o0*]|puta\s*que\s*(me\s*)?pariu|pqp|merda)|\b(vsf|vtnc|vtmnc|tnc)\b|\b(enfia|enfie)\s*(isso\s*)?n[oa]\s*(cu|cú|c\*)|\bfdp\b|filh[oa]\s*d[ea]\s*puta|\bviado\b|\bretardado\b)/i
-};
-const botAv=()=>{const a=el('div','av','🤖');a.style.background='#78716c';return a};
-function checkText(t){
-  if(RX.scam.test(t))return{bot:'scam',why:'link ou golpe suspeito'};
-  if(RX.priv.test(t))return{bot:'priv',why:'dado pessoal ou sensível'};
-  if(RX.tox.test(t))return{bot:'tox',why:'ofensa direcionada'};
-}
-function spamCheck(m,prev){
-  const mine=prev.filter(x=>x.uid===m.uid&&!x.bot);
-  if(mine.filter(x=>m.ts-x.ts<10000).length>=4)return{bot:'spam',why:'flood de mensagens'};
-  if(mine.slice(-2).filter(x=>x.text===m.text&&m.ts-x.ts<60000).length>=2)return{bot:'spam',why:'mensagem repetida'};
-  if(/(.)\1{11,}/.test(m.text))return{bot:'spam',why:'caracteres repetidos'};
-}
-function preSend(t){
-  if((mutes[me]||0)>Date.now())return '👮 ModBot: você está silenciado até '+new Date(mutes[me]).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'.';
-  const v=checkText(t)||spamCheck({uid:me,text:t,ts:Date.now()},msgs);
-  return v?BOTS[v.bot].n+' bloqueou sua mensagem: '+v.why+'.':null;
-}
-function scanMsgs(){
-  const now=Date.now(),path='servers/'+sv+'/channels/'+ch+'/messages/';
-  msgs.forEach((m,i)=>{
-    if(m.bot||scanned.has(m.id))return;scanned.add(m.id);
-    const v=checkText(m.text||'')||spamCheck(m,msgs.slice(0,i));if(!v)return;
-    if(v.bot!=='spam')db.doc(path+m.id).delete().catch(()=>{});
-    if(now-m.ts>120000)return;
-    db.doc('strikes/'+m.id).set({uid:m.uid,bot:v.bot,ts:now}).catch(()=>{});
-    db.doc(path+'w_'+m.id).set({uid:'bot',bot:BOTS[v.bot].n,text:nm(m.uid)+': '+(v.bot==='spam'?'mensagem sinalizada':'mensagem removida')+' ('+v.why+').',ts:now}).catch(()=>{});
-  });
-}
-/* ===== Presença, digitação e sinalização da call sobre o Firestore ===== */
-function mkRoom(db,uid){
-  const sid=Math.random().toString(36).slice(2,10)+Date.now().toString(36);
-  let st={},peerCb=null,rows=[];
-  const pref=db.collection('presence'),mine=pref.doc(sid);
-  const write=()=>mine.set({...st,by:uid,seen:Date.now()}).catch(()=>{});
-  const emitPeers=()=>{if(!peerCb)return;const now=Date.now();
-    peerCb({peers:rows.filter(r=>now-r.seen<75000).map(r=>({peer:r.id,by:r.by,isMe:r.id===sid,presence:r}))})};
-  pref.onSnapshot(q=>{rows=q.docs.map(d=>({id:d.id,...d.data()}));emitPeers()},()=>{});
-  setInterval(emitPeers,5000);setInterval(()=>{if(!document.hidden||vc)write()},30000);write();
-  addEventListener('pagehide',()=>{mine.delete().catch(()=>{})});
-  return{
-    presence(o){st=o;return write()},
-    onPeers(cb){peerCb=cb;emitPeers()},
-    on(topic,cb,err){db.collection('signals').where('to','==',sid).onSnapshot(q=>{
-      q.docChanges().forEach(c=>{if(c.type!=='added')return;const d=c.doc.data();c.doc.ref.delete().catch(()=>{});
-        if(Date.now()-d.ts<20000)cb({data:d,peer:d.from,isMe:false})})},err)},
-    emit(topic,data){return db.collection('signals').add({...data,from:sid,ts:Date.now()})}
-  };
-}
-init();
+  message.style.display = "block";
+
+  if (method === "pix") {
+    message.textContent =
+      "Pix selecionado. O QR Code e a cobrança ainda não estão conectados. " +
+      "Configure um provedor de pagamentos para gerar uma cobrança real e confirmar o pagamento.";
+  } else {
+    message.textContent =
+      "Cartão selecionado. Para continuar com segurança, esta etapa precisa " +
+      "ser conectada ao checkout oficial de um provedor de pagamentos.";
+  }
+});
 </script>
 </body>
 </html>
