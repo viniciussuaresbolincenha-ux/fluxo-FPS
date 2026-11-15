@@ -2,503 +2,256 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101010">
-<title>Fluxo FPS — Performance e proteção</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0c0f">
+<title>Fluxo FPS</title>
 <style>
-:root {
-  --bg: #0b0c0e;
-  --panel: #141619;
-  --panel2: #1b1e22;
-  --orange: #ff762e;
-  --text: #f4f4f5;
-  --muted: #a1a1aa;
-  --border: #292c31;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  line-height: 1.6;
-}
-
-header {
-  height: 76px;
-  padding: 0 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: rgba(11,12,14,.96);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.logo {
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: -1px;
-}
-
-.logo span { color: var(--orange); }
-
-nav { display: flex; gap: 26px; }
-
-nav a {
-  color: #c7c7cc;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-nav a:hover { color: var(--orange); }
-
-.button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 19px;
-  background: var(--orange);
-  color: #16100c;
-  border: 0;
-  border-radius: 8px;
-  font-weight: 800;
-  text-decoration: none;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.button:hover {
-  background: #ff945b;
-  transform: translateY(-2px);
-}
-
-.button.secondary {
-  background: transparent;
-  border: 1px solid #45484e;
-  color: white;
-}
-
-main { overflow: hidden; }
-
-.hero {
-  padding: 105px 7% 95px;
-  background:
-    radial-gradient(ellipse at 80% 35%, rgba(255,118,46,.13), transparent 40%),
-    linear-gradient(180deg, #101113, var(--bg));
-}
-
-.eyebrow {
-  color: var(--orange);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-h1 {
-  max-width: 780px;
-  margin: 18px 0;
-  font-size: clamp(42px, 6vw, 76px);
-  line-height: 1.04;
-  letter-spacing: -3px;
-}
-
-h1 span { color: var(--orange); }
-
-.hero p {
-  max-width: 600px;
-  color: var(--muted);
-  font-size: 17px;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 35px;
-  color: #bfc2c8;
-  font-size: 12px;
-}
-
-.status::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  background: #ff762e;
-  border-radius: 50%;
-  box-shadow: 0 0 12px #ff762e;
-}
-
-section { padding: 75px 7%; }
-
-.section-head { margin-bottom: 32px; }
-
-h2 {
-  font-size: clamp(28px, 4vw, 42px);
-  letter-spacing: -1.5px;
-  line-height: 1.15;
-  margin: 10px 0;
-}
-
-.section-head p {
-  color: var(--muted);
-  max-width: 650px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 17px;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 25px;
-}
-
-.card .icon {
-  width: 43px;
-  height: 43px;
-  display: grid;
-  place-items: center;
-  background: rgba(255,118,46,.12);
-  color: var(--orange);
-  border-radius: 10px;
-  font-size: 21px;
-  margin-bottom: 20px;
-}
-
-.card h3 { margin: 0 0 9px; }
-
-.card p {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 0;
-}
-
-.product {
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 30px;
-  align-items: center;
-  background: linear-gradient(135deg, #191b1e, #111214);
-  border: 1px solid #35383d;
-  border-radius: 18px;
-  padding: clamp(24px, 5vw, 48px);
-}
-
-.product-label {
-  color: var(--orange);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-}
-
-.price {
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: -2px;
-  margin: 18px 0;
-}
-
-.price small {
-  font-size: 14px;
-  color: var(--muted);
-  letter-spacing: 0;
-  font-weight: 500;
-}
-
-.features {
-  list-style: none;
-  padding: 0;
-  color: #d2d3d7;
-  font-size: 14px;
-}
-
-.features li { margin: 11px 0; }
-.features li::before {
-  content: "✓";
-  color: var(--orange);
-  margin-right: 10px;
-  font-weight: 900;
-}
-
-.product-visual {
-  min-height: 260px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  border: 1px solid #34373b;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255,118,46,.16), transparent 55%),
-    #0d0e10;
-}
-
-.shield {
-  width: 130px;
-  height: 150px;
-  border: 2px solid var(--orange);
-  clip-path: polygon(50% 0, 95% 17%, 87% 69%, 50% 100%, 13% 69%, 5% 17%);
-  display: grid;
-  place-items: center;
-  color: var(--orange);
-  font-size: 48px;
-  filter: drop-shadow(0 0 20px rgba(255,118,46,.4));
-}
-
-.note {
-  margin-top: 16px;
-  color: #92949b;
-  font-size: 12px;
-}
-
-#checkout {
-  background: #101113;
-  border-top: 1px solid var(--border);
-}
-
-.checkout-box {
-  max-width: 650px;
-  margin: auto;
-  padding: 30px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 14px;
-}
-
-label {
-  display: block;
-  font-size: 13px;
-  margin: 16px 0 7px;
-  color: #d7d7db;
-}
-
-input, select {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #393c42;
-  border-radius: 8px;
-  background: #0d0e10;
-  color: white;
-  font: inherit;
-}
-
-.checkout-box .button { width: 100%; margin-top: 18px; }
-
-#checkout-message {
-  display: none;
-  margin-top: 20px;
-  padding: 15px;
-  background: #202226;
-  border-radius: 8px;
-  color: #e6e6e8;
-  overflow-wrap: anywhere;
-}
-
-footer {
-  padding: 30px 7%;
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-@media(max-width: 760px) {
-  header { padding: 0 5%; }
-  nav { display: none; }
-  .hero { padding: 75px 6%; }
-  section { padding: 60px 6%; }
-  .grid { grid-template-columns: 1fr; }
-  .product { grid-template-columns: 1fr; }
-  .product-visual { min-height: 200px; }
-  h1 { letter-spacing: -2px; }
-}
+:root{--bg:#0b0c0f;--panel:#13161b;--panel2:#1a1e24;--line:#292e36;--orange:#ff792f;--text:#f5f6f8;--muted:#9299a5;--green:#64e6a1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:225px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#0e1013;border-right:1px solid var(--line);padding:24px 15px;display:flex;flex-direction:column;gap:25px}
+.brand{font-weight:900;font-size:23px;letter-spacing:-1px;padding:5px 10px}
+.brand span,.orange{color:var(--orange)}
+.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:4px}
+.nav-title{font-size:10px;letter-spacing:1.6px;color:#737b87;padding:0 12px}
+.nav{display:grid;gap:7px}
+.nav button{border:1px solid transparent;background:transparent;color:#aeb4bf;text-align:left;padding:12px;border-radius:8px}
+.nav button:hover,.nav button.active{background:#241910;border-color:#50301f;color:white}
+.nav button.active:before{content:"● ";color:var(--orange)}
+.side-note{margin-top:auto;border:1px solid var(--line);border-radius:9px;padding:12px;font-size:12px;color:var(--muted)}
+main{min-width:0}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0b0c0fee;backdrop-filter:blur(12px);z-index:5}
+.topbar small{color:var(--muted)}
+.status{color:var(--green);font-size:12px}
+.status:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:8px}
+.content{padding:28px;max-width:1500px;margin:auto}
+.page{display:none}
+.page.active{display:block;animation:enter .3s ease}
+@keyframes enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:24px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--orange)}
+h1{font-size:clamp(28px,3vw,40px);letter-spacing:-1.4px;margin:8px 0}
+h2{font-size:18px;margin:0 0 8px}
+p{color:var(--muted);line-height:1.6}
+.btn{background:var(--orange);color:#19100a;border:0;border-radius:7px;padding:11px 15px;font-weight:800}
+.btn:hover{background:#ff9b63}
+.btn.secondary{background:#20242b;border:1px solid #353b44;color:white}
+.grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:19px;min-width:0}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-size:29px;font-weight:850;letter-spacing:-1px;margin:9px 0}
+.stat-foot{font-size:11px;color:var(--muted)}
+.middle{grid-template-columns:1.4fr 1fr}
+.chart{display:block;width:100%;height:190px;margin-top:12px}
+.chart-line{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round}
+.chart-area{fill:url(#fill)}
+.bar-row{display:grid;grid-template-columns:60px 1fr 35px;gap:8px;align-items:center;font-size:12px;margin:22px 0}
+.bar{height:7px;background:#292e36;border-radius:20px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--orange);border-radius:20px}
+.wide{margin-top:14px}
+.product{display:grid;grid-template-columns:1fr 220px;gap:20px;background:linear-gradient(120deg,#1b1d22,#111317);border:1px solid #493328;border-radius:14px;padding:26px}
+.tag{display:inline-block;font-size:11px;padding:5px 8px;background:#292018;color:#ffb58e;border-radius:5px}
+.price{font-size:42px;font-weight:900;letter-spacing:-1.5px;margin:15px 0}
+.price small{font-size:12px;letter-spacing:0;color:var(--muted)}
+.product-graphic{display:grid;place-items:center;min-height:170px;background:radial-gradient(circle, #542c1e55,transparent 70%)}
+.shield{font-size:100px;color:var(--orange);filter:drop-shadow(0 0 22px #b94e1d)}
+.list{padding:0;list-style:none;color:#d5d8de;font-size:13px}
+.list li{padding:9px 0;border-bottom:1px solid var(--line)}
+.list li:before{content:"✓";color:var(--orange);margin-right:9px}
+.notice{background:#211a14;border:1px solid #493626;border-radius:8px;padding:13px;color:#d9bba7;font-size:12px;margin-top:15px}
+.two{grid-template-columns:1fr 1fr}
+.field{display:block;width:100%;padding:12px;background:#0c0e11;color:white;border:1px solid #343a43;border-radius:7px;margin:7px 0 15px}
+label{font-size:12px;color:#c8cbd2}
+footer{font-size:11px;color:#737b87;padding:25px 0}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{padding:13px;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;overflow-x:auto}.nav button{white-space:nowrap}.nav-title,.side-note{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.middle,.two{grid-template-columns:1fr}}
+@media(max-width:550px){.content{padding:15px}.topbar{padding:0 15px}.heading{align-items:flex-start;flex-direction:column}.product{grid-template-columns:1fr}.product-graphic{min-height:80px}}
 </style>
 </head>
-
 <body>
-<header>
-  <a href="#" class="logo" style="color:white;text-decoration:none">
-    FLUXO<span> FPS</span>
-  </a>
-
-  <nav>
-    <a href="#recursos">Recursos</a>
-    <a href="#anticheat">Anti-cheat</a>
-    <a href="#sobre">Sobre</a>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">FLUXO<span> FPS</span><small>PERFORMANCE SYSTEM</small></div>
+  <div class="nav-title">PLATAFORMA</div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard">◈ Visão geral</button>
+    <button data-page="monitor">⌁ Monitoramento</button>
+    <button data-page="security">⬡ Segurança</button>
+    <button data-page="store">▣ Anti-cheat</button>
+    <button data-page="settings">⚙ Configurações</button>
   </nav>
-
-  <a class="button" href="#anticheat">Conhecer produto</a>
-</header>
+  <div class="side-note">Interface inicial<br><span class="orange">Módulos reais requerem integração.</span></div>
+</aside>
 
 <main>
-  <div class="hero">
-    <div class="eyebrow">Desempenho • Tecnologia • Proteção</div>
-    <h1>Seu PC. Seu jogo.<br><span>Seu controle.</span></h1>
-    <p>
-      Uma experiência focada em desempenho, simplicidade e ferramentas
-      para ajudar você a entender melhor seu computador e seus jogos.
-    </p>
+<header class="topbar">
+  <div><strong id="top-title">Visão geral</strong><br><small>Central de desempenho</small></div>
+  <span class="status">Interface iniciada</span>
+</header>
+<div class="content">
 
-    <div class="actions">
-      <a href="#recursos" class="button">Explorar recursos ↗</a>
-      <a href="#anticheat" class="button secondary">Ver anti-cheat</a>
-    </div>
-
-    <div class="status">Interface Fluxo FPS</div>
+<section class="page active" id="dashboard">
+  <div class="heading">
+    <div><div class="eyebrow">FLUXO / DASHBOARD</div><h1>Seu desempenho, em foco.</h1><p>Monitoramento e segurança em uma única central.</p></div>
+    <button class="btn secondary" id="refresh">↻ Atualizar</button>
   </div>
+  <div class="grid stats">
+    <article class="card"><div class="stat-label">FPS</div><div class="stat-value">—</div><div class="stat-foot">Fonte de dados não conectada</div></article>
+    <article class="card"><div class="stat-label">CPU</div><div class="stat-value">—</div><div class="stat-foot">Sensor não conectado</div></article>
+    <article class="card"><div class="stat-label">GPU</div><div class="stat-value">—</div><div class="stat-foot">Sensor não conectado</div></article>
+    <article class="card"><div class="stat-label">RAM</div><div class="stat-value">—</div><div class="stat-foot">Leitura não configurada</div></article>
+  </div>
+  <div class="grid middle">
+    <article class="card"><h2>Desempenho</h2><p>Gráfico visual ilustrativo, ainda sem telemetria real.</p>
+      <svg class="chart" viewBox="0 0 600 180" preserveAspectRatio="none">
+        <defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff792f" stop-opacity=".3"/><stop offset="100%" stop-color="#ff792f" stop-opacity="0"/></linearGradient></defs>
+        <g stroke="#292e36" stroke-dasharray="4 6"><path d="M0 30H600"/><path d="M0 70H600"/><path d="M0 110H600"/><path d="M0 150H600"/></g>
+        <path class="chart-area" d="M0 140 Q50 100 90 125 T180 90 T270 110 T360 50 T450 80 T540 35 L600 50 L600 180 L0 180Z"/>
+        <path class="chart-line" d="M0 140 Q50 100 90 125 T180 90 T270 110 T360 50 T450 80 T540 35 L600 50"/>
+      </svg>
+    </article>
+    <article class="card"><h2>Status dos módulos</h2>
+      <div class="bar-row"><span>Interface</span><div class="bar"><span style="width:100%"></span></div><span>OK</span></div>
+      <div class="bar-row"><span>FPS</span><div class="bar"><span style="width:15%"></span></div><span>—</span></div>
+      <div class="bar-row"><span>Hardware</span><div class="bar"><span style="width:15%"></span></div><span>—</span></div>
+      <div class="bar-row"><span>Segurança</span><div class="bar"><span style="width:15%"></span></div><span>—</span></div>
+      <p style="font-size:11px">As barras não representam medições reais.</p>
+    </article>
+  </div>
+  <article class="card wide"><h2>Fluxo Anti-cheat</h2><p>Produto planejado: R$ 30,00.</p><button class="btn" data-goto="store">Ver produto →</button></article>
+</section>
 
-  <section id="recursos">
-    <div class="section-head">
-      <div class="eyebrow">Plataforma</div>
-      <h2>Informação sem complicação.</h2>
-      <p>Uma interface organizada para apresentar recursos úteis sem sobrecarregar a tela.</p>
+<section class="page" id="monitor">
+  <div class="eyebrow">TELEMETRIA</div><h1>Monitoramento</h1><p>Conecte uma fonte de dados para exibir leituras reais.</p>
+  <div class="grid two">
+    <article class="card"><h2>FPS e frametime</h2><div class="stat-value">—</div><p>Sem fonte de dados conectada.</p></article>
+    <article class="card"><h2>Hardware</h2><p>CPU, GPU, RAM e temperatura aparecerão aqui quando os sensores forem integrados.</p><span class="tag">INTEGRAÇÃO PENDENTE</span></article>
+  </div>
+</section>
+
+<section class="page" id="security">
+  <div class="eyebrow">PROTEÇÃO</div><h1>Segurança</h1><p>Painel preparado para um componente de segurança real.</p>
+  <div class="grid two">
+    <article class="card"><h2>Estado</h2><p>O módulo de segurança ainda não está instalado.</p><span class="tag">NÃO CONFIGURADO</span></article>
+    <article class="card"><h2>Eventos</h2><p>Os registros aparecerão aqui após a implementação.</p><span class="tag">AGUARDANDO</span></article>
+  </div>
+  <div class="notice">A interface não detecta trapaças nem protege jogos por conta própria.</div>
+</section>
+
+<section class="page" id="store">
+  <div class="eyebrow">LOJA FLUXO</div><h1>Fluxo Anti-cheat</h1><p>Preço previsto: R$ 30,00.</p>
+  <div class="product">
+    <div><span class="tag">FLUXO / SECURITY</span><h2 style="margin-top:15px">Proteção com uma experiência simples.</h2>
+      <p>O software real e o serviço de licenças precisam ser implementados separadamente.</p>
+      <div class="price">R$ 30,00 <small>pagamento único</small></div>
+      <ul class="list"><li>Fluxo de compra preparado</li><li>Validação de licença a implementar</li><li>Download após aprovação a implementar</li></ul>
+      <button class="btn" id="buy">Continuar para pagamento</button>
+      <div class="notice" id="payment-message">Checkout ainda não conectado. Nenhuma cobrança será realizada.</div>
     </div>
+    <div class="product-graphic"><div class="shield">⬡</div></div>
+  </div>
+</section>
 
-    <div class="grid">
-      <article class="card">
-        <div class="icon">◈</div>
-        <h3>Monitoramento</h3>
-        <p>Área preparada para exibir informações reais de CPU, memória, GPU e utilização do sistema quando conectada a um aplicativo compatível.</p>
-      </article>
-
-      <article class="card">
-        <div class="icon">⌁</div>
-        <h3>Desempenho</h3>
-        <p>Organize indicadores de desempenho e acompanhe os dados disponibilizados pelo programa instalado.</p>
-      </article>
-
-      <article class="card">
-        <div class="icon">⬡</div>
-        <h3>Proteção</h3>
-        <p>Apresentação de ferramentas de segurança, status de licenças e recursos de proteção quando implementados.</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="anticheat">
-    <div class="section-head">
-      <div class="eyebrow">Produto</div>
-      <h2>Fluxo Anti-cheat</h2>
-      <p>Confira a oferta e avance para a etapa de pagamento.</p>
-    </div>
-
-    <div class="product">
-      <div>
-        <div class="product-label">FLUXO • ANTI-CHEAT</div>
-        <h2>Uma camada extra de proteção.</h2>
-        <p style="color:var(--muted)">
-          Produto planejado para integrar verificações de segurança.
-          As funcionalidades reais dependem da implementação do software.
-        </p>
-
-        <div class="price">R$ 30,00 <small>/ compra</small></div>
-
-        <ul class="features">
-          <li>Interface de produto dedicada</li>
-          <li>Área preparada para validação de licença</li>
-          <li>Fluxo de compra integrado ao site</li>
-        </ul>
-
-        <a href="#checkout" class="button">Comprar anti-cheat →</a>
-        <p class="note">A compra e o download ainda precisam ser conectados a um sistema real de pagamentos e licenças.</p>
-      </div>
-
-      <div class="product-visual">
-        <div class="shield">⬡</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="sobre">
-    <div class="section-head">
-      <div class="eyebrow">Nossa proposta</div>
-      <h2>Menos confusão. Mais controle.</h2>
-      <p>O Fluxo FPS foi pensado para apresentar recursos e informações de forma clara, com uma interface leve e organizada.</p>
-    </div>
-  </section>
-
-  <section id="checkout">
-    <div class="checkout-box">
-      <div class="eyebrow">Finalizar compra</div>
-      <h2>Fluxo Anti-cheat</h2>
-      <p style="color:var(--muted)">Valor do produto: <strong style="color:white">R$ 30,00</strong></p>
-
-      <form id="checkout-form">
-        <label for="customer-email">Seu e-mail</label>
-        <input id="customer-email" type="email" placeholder="voce@exemplo.com" required>
-
-        <label for="payment-method">Forma de pagamento</label>
-        <select id="payment-method" required>
-          <option value="">Escolha uma opção</option>
-          <option value="pix">Pix</option>
-          <option value="card">Cartão</option>
-        </select>
-
-        <button type="submit" class="button">Continuar</button>
-      </form>
-
-      <div id="checkout-message" role="status"></div>
-      <p class="note">
-        Esta demonstração não processa cobranças. Não insira dados de cartão
-        aqui. Para vender de verdade, conecte um provedor de pagamentos seguro.
-      </p>
-    </div>
-  </section>
+<section class="page" id="settings">
+  <div class="eyebrow">PREFERÊNCIAS</div><h1>Configurações</h1>
+  <article class="card"><h2>Aparência</h2><p>Tema preto e laranja.</p><button class="btn secondary" id="motion">Alternar animações</button><p id="motion-status">Animações ativadas.</p></article>
+</section>
+<footer>FLUXO FPS · <span id="year"></span></footer>
+</div>
 </main>
-
-<footer>
-  <div><strong style="color:white">FLUXO<span style="color:var(--orange)"> FPS</span></strong></div>
-  <div>Interface demonstrativa • Fluxo FPS</div>
-  <div>© <span id="year"></span> Fluxo FPS</div>
-</footer>
-
+</div>
 <script>
-document.getElementById("year").textContent = new Date().getFullYear();
-
-const form = document.getElementById("checkout-form");
-const message = document.getElementById("checkout-message");
-
-form.addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const email = document.getElementById("customer-email").value.trim();
-  const method = document.getElementById("payment-method").value;
-
-  if (!email || !method) {
-    return;
-  }
-
-  message.style.display = "block";
-
-  if (method === "pix") {
-    message.textContent =
-      "Pix selecionado. O QR Code e a cobrança ainda não estão conectados. " +
-      "Configure um provedor de pagamentos para gerar uma cobrança real e confirmar o pagamento.";
-  } else {
-    message.textContent =
-      "Cartão selecionado. Para continuar com segurança, esta etapa precisa " +
-      "ser conectada ao checkout oficial de um provedor de pagamentos.";
-  }
+const titles={dashboard:"Visão geral",monitor:"Monitoramento",security:"Segurança",store:"Anti-cheat",settings:"Configurações"};
+function showPage(id){
+  if(!document.getElementById(id))return;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  document.getElementById("top-title").textContent=titles[id];
+}
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.goto)));
+document.getElementById("refresh").addEventListener("click",()=>{
+  const b=document.getElementById("refresh");b.textContent="✓ Interface atualizada";
+  setTimeout(()=>b.textContent="↻ Atualizar",1200);
 });
+document.getElementById("buy").addEventListener("click",()=>{
+  document.getElementById("payment-message").textContent=
+  "Checkout não configurado. Nenhuma cobrança ou liberação de licença foi realizada.";
+});
+let animations=true;
+document.getElementById("motion").addEventListener("click",()=>{
+  animations=!animations;
+  document.querySelectorAll(".page").forEach(p=>p.style.animation=animations?"enter .3s ease":"none");
+  document.getElementById("motion-status").textContent=animations?"Animações ativadas.":"Animações desativadas.";
+});
+document.getElementById("year").textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
+{
+  "name": "fluxo-fps",
+  "productName": "Fluxo FPS",
+  "version": "1.0.0",
+  "description": "Painel de desempenho Fluxo FPS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "make": "electron-forge make"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.8.0",
+    "@electron-forge/maker-squirrel": "^7.8.0",
+    "electron": "^39.0.0"
+  }
+}
+const { app, BrowserWindow } = require("electron");
+const path = require("node:path");
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1400,
+    height: 900,
+    minWidth: 800,
+    minHeight: 600,
+    title: "Fluxo FPS",
+    backgroundColor: "#0b0c0f",
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true
+    }
+  });
+
+  win.loadFile(path.join(__dirname, "index.html"));
+}
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
+module.exports = {
+  packagerConfig: {
+    name: "Fluxo FPS",
+    executableName: "FluxoFPS"
+  },
+  makers: [
+    {
+      name: "@electron-forge/maker-squirrel",
+      config: {
+        name: "FluxoFPS"
+      }
+    }
+  ]
+};
