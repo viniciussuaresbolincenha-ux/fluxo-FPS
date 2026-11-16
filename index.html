@@ -4,323 +4,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080c14">
-<meta name="description" content="Fluxo FPS — painel de desempenho, diagnóstico e ferramentas para jogadores.">
-<title>Fluxo FPS | Central Gamer</title>
+<meta name="theme-color" content="#080808">
+<title>Fluxo FPS | Performance Center</title>
 
 <style>
 :root {
-  --bg: #080c14;
-  --panel: #101827;
-  --panel2: #151f31;
-  --border: #27354b;
-  --text: #f0f5ff;
-  --muted: #94a5bd;
-  --blue: #46a6ff;
-  --green: #42e6a4;
-  --orange: #ffbd59;
-  --red: #ff647c;
+  --bg: #080808;
+  --panel: #111111;
+  --panel2: #171717;
+  --border: #39230e;
+  --orange: #ff8500;
+  --orange2: #ffae00;
+  --text: #f5f5f5;
+  --muted: #999999;
+  --green: #36db85;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
 body {
   margin: 0;
-  background:
-    radial-gradient(ellipse at top right, #122c4a 0, transparent 40%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
-  min-height: 100vh;
 }
 
 button, input {
   font: inherit;
 }
 
-button {
-  cursor: pointer;
+button, a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 20px 6%;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8,12,20,.92);
   position: sticky;
   top: 0;
-  z-index: 5;
-  backdrop-filter: blur(15px);
+  z-index: 10;
+  background: rgba(8,8,8,.96);
+  border-bottom: 1px solid var(--orange);
+  padding: 16px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .logo {
-  font-size: 23px;
   font-weight: 900;
+  font-size: 24px;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 
-.logo span {
-  color: var(--blue);
-}
-
-.status {
-  color: var(--green);
-  font-size: 12px;
+.logo span, .orange {
+  color: var(--orange);
 }
 
 nav {
   display: flex;
-  gap: 18px;
+  gap: 22px;
   flex-wrap: wrap;
 }
 
 nav a {
-  color: var(--muted);
+  color: #bbb;
   text-decoration: none;
   font-size: 13px;
 }
 
 nav a:hover {
-  color: white;
+  color: var(--orange);
 }
 
 main {
-  max-width: 1200px;
-  padding: 35px 22px 70px;
+  max-width: 1250px;
+  padding: 25px 22px 55px;
   margin: auto;
 }
 
 .hero {
-  padding: 45px 0 30px;
+  min-height: 330px;
+  padding: 50px 0;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(ellipse at 90% 50%, #321a06 0, transparent 45%);
 }
 
-.tag {
+.badge {
   display: inline-block;
-  border: 1px solid #27517c;
-  color: var(--blue);
-  background: #10233b;
-  border-radius: 30px;
-  padding: 8px 13px;
-  font-size: 12px;
+  background: #39200a;
+  border: 1px solid #804300;
+  color: var(--orange2);
+  padding: 7px 11px;
+  border-radius: 5px;
+  font-size: 11px;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
 h1 {
-  font-size: clamp(36px, 6vw, 66px);
-  line-height: 1.04;
+  font-size: clamp(38px, 6vw, 68px);
+  line-height: 1.02;
   letter-spacing: -2px;
-  margin: 22px 0;
-}
-
-h1 span {
-  color: var(--blue);
-}
-
-.hero p, .muted {
-  color: var(--muted);
-  line-height: 1.7;
+  margin: 20px 0;
 }
 
 .hero p {
-  max-width: 650px;
+  max-width: 600px;
+  color: #aaa;
+  line-height: 1.7;
+}
+
+.btn {
+  border: 1px solid var(--orange);
+  background: var(--orange);
+  color: #080808;
+  font-weight: bold;
+  padding: 12px 17px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: var(--orange2);
+}
+
+.btn.outline {
+  background: transparent;
+  color: var(--orange);
+}
+
+.section {
+  padding-top: 36px;
+  scroll-margin-top: 80px;
+}
+
+.section-heading {
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin: 25px 0;
+  gap: 14px;
 }
 
 .card {
-  background: linear-gradient(145deg, var(--panel2), var(--panel));
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px;
+  background: linear-gradient(145deg, #171717, #0d0d0d);
+  border: 1px solid #352414;
+  border-radius: 10px;
+  padding: 20px;
   min-width: 0;
 }
 
-.card h2, .card h3 {
-  margin-top: 0;
+.card h3 {
+  font-size: 15px;
+  margin: 0 0 15px;
 }
 
-.metric {
-  font-size: 36px;
+.label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+.value {
+  font-size: 39px;
   font-weight: 900;
-  margin: 17px 0 8px;
+  margin: 15px 0 5px;
+  letter-spacing: -1px;
 }
 
-.metric small {
+.value small {
   font-size: 13px;
-  color: var(--muted);
+  color: #aaa;
+  letter-spacing: 0;
 }
 
 .muted {
-  font-size: 13px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
-.btn {
-  display: inline-block;
-  background: var(--blue);
-  color: #06111f;
-  border: 0;
-  padding: 12px 17px;
-  border-radius: 9px;
-  font-weight: 800;
-  text-decoration: none;
-  margin: 5px 5px 5px 0;
-}
-
-.btn:hover {
-  filter: brightness(1.12);
-}
-
-.btn.secondary {
-  background: #25364e;
-  color: white;
-  border: 1px solid #3a4e68;
-}
-
-.btn.green {
-  background: var(--green);
-}
-
-.section {
-  margin-top: 60px;
-  scroll-margin-top: 100px;
-}
-
-.section-title {
-  font-size: 30px;
-  margin-bottom: 8px;
+.divider {
+  height: 1px;
+  background: #30251a;
+  margin: 18px 0;
 }
 
 .bar {
-  height: 9px;
-  background: #25344a;
-  border-radius: 10px;
+  width: 100%;
+  height: 7px;
+  background: #292929;
   overflow: hidden;
-  margin: 15px 0;
+  border-radius: 10px;
+  margin: 13px 0;
 }
 
 .bar div {
-  height: 100%;
   width: 0;
-  background: var(--blue);
+  height: 100%;
+  background: linear-gradient(90deg, #ff6500, #ffbd00);
   transition: width .2s;
 }
 
-.result {
-  padding: 12px;
-  background: #0b1320;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin-top: 15px;
-  overflow-wrap: anywhere;
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+  font-size: 12px;
 }
 
-.field {
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.monitor-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.monitor-controls .muted {
+  margin-left: auto;
+}
+
+canvas {
   width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  color: white;
-  background: #09111d;
-  margin: 8px 0;
+  height: 150px;
+  display: block;
+  margin-top: 12px;
+}
+
+.result {
+  background: #0a0a0a;
+  border: 1px solid #30251a;
+  border-radius: 7px;
+  padding: 13px;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.feature-icon {
+  color: var(--orange);
+  font-size: 25px;
+  margin-bottom: 13px;
 }
 
 .price {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 900;
   margin: 20px 0;
 }
 
 .price small {
-  font-size: 14px;
-  color: var(--muted);
+  font-size: 13px;
+  color: #aaa;
+  font-weight: normal;
 }
 
 ul {
-  color: var(--muted);
+  color: #aaa;
+  padding-left: 19px;
+  font-size: 13px;
   line-height: 2;
-  padding-left: 20px;
-}
-
-.warning {
-  border-color: #66512a;
-}
-
-.warning .tag {
-  border-color: #66512a;
-  color: var(--orange);
-  background: #292113;
 }
 
 .chatbox {
-  height: 240px;
+  height: 220px;
   overflow-y: auto;
   padding: 12px;
-  border-radius: 10px;
-  background: #090f19;
-  border: 1px solid var(--border);
+  background: #090909;
+  border: 1px solid #30251a;
+  border-radius: 7px;
   margin-bottom: 12px;
 }
 
 .message {
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin: 7px 0;
-  background: #17243a;
-  line-height: 1.5;
+  padding: 10px;
+  background: #1b1b1b;
+  border-radius: 7px;
+  margin-bottom: 8px;
   font-size: 13px;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 
 .message.user {
-  background: #153b5d;
-  text-align: right;
+  border-left: 2px solid var(--orange);
+}
+
+.chat-form {
+  display: flex;
+  gap: 8px;
+}
+
+input {
+  min-width: 0;
+  flex: 1;
+  background: #101010;
+  border: 1px solid #3b3023;
+  border-radius: 6px;
+  color: white;
+  padding: 12px;
+}
+
+input:focus {
+  outline: 1px solid var(--orange);
 }
 
 footer {
-  text-align: center;
-  padding: 30px 15px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
+  border-top: 1px solid #3b240e;
+  padding: 25px 5%;
+  color: #888;
   font-size: 12px;
   line-height: 1.8;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 @media(max-width: 800px) {
+  header {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    gap: 13px;
+  }
+
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  header {
-    position: static;
-    flex-direction: column;
-    align-items: flex-start;
+  .monitor-controls .muted {
+    margin-left: 0;
+    width: 100%;
   }
 }
 
 @media(max-width: 540px) {
+  main {
+    padding: 18px 13px 40px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }
 
-  main {
-    padding: 20px 14px 50px;
+  .hero {
+    padding: 35px 0;
   }
 
   h1 {
     letter-spacing: -1px;
+  }
+
+  .value {
+    font-size: 34px;
   }
 }
 </style>
@@ -331,7 +408,7 @@ footer {
 <header>
   <div>
     <div class="logo">FLUXO <span>FPS</span></div>
-    <div class="status">● CENTRAL DE FERRAMENTAS</div>
+    <div class="status"><span class="dot"></span> CENTRAL DE DESEMPENHO</div>
   </div>
 
   <nav>
@@ -346,219 +423,229 @@ footer {
 <main>
 
 <section class="hero">
-  <span class="tag">CENTRAL GAMER · VERSÃO PROTÓTIPO</span>
+  <span class="badge">PERFORMANCE CENTER · PROTÓTIPO</span>
 
-  <h1>Seu jogo.<br>Seu desempenho.<br><span>Seu controle.</span></h1>
+  <h1>
+    Seu jogo.<br>
+    Seu desempenho.<br>
+    <span class="orange">Seu controle.</span>
+  </h1>
 
   <p>
-    Uma central para acompanhar a fluidez do navegador, consultar
-    informações de desempenho e conhecer as ferramentas planejadas
-    para o Fluxo FPS.
+    Monitore a fluidez do navegador, consulte informações disponíveis
+    do sistema e acompanhe o desenvolvimento das ferramentas Fluxo FPS.
   </p>
 
-  <a class="btn" href="#monitor">Abrir monitor</a>
-  <a class="btn secondary" href="#downloads">Ver ferramentas</a>
+  <a href="#monitor" class="btn">Abrir monitor →</a>
 </section>
 
 <section id="monitor" class="section">
-  <h2 class="section-title">Monitor de desempenho</h2>
-  <p class="muted">
-    Este teste mede a fluidez da animação nesta página, não o FPS
-    interno de jogos como Roblox, GTA V, Fortnite ou Valorant.
-  </p>
+  <div class="section-heading">
+    <h2>▰ Monitor de desempenho</h2>
+    <p>
+      Medição da fluidez desta página. Não representa o FPS interno dos jogos.
+    </p>
+  </div>
 
   <div class="grid">
     <article class="card">
-      <h3>Fluidez do navegador</h3>
-      <div class="metric" id="fps">-- <small>FPS</small></div>
+      <div class="label">Fluidez do navegador</div>
+      <div class="value" id="fps">-- <small>FPS</small></div>
       <div class="bar"><div id="fpsbar"></div></div>
-      <p class="muted">Estimativa da taxa de atualização da página.</p>
+      <div class="muted" id="fpsnote">Monitor aguardando início.</div>
     </article>
 
     <article class="card">
-      <h3>Memória JavaScript</h3>
-      <div class="metric" id="memory">--</div>
-      <p class="muted" id="memorynote">
-        Disponível apenas em alguns navegadores.
-      </p>
-    </article>
-
-    <article class="card">
-      <h3>Estado do sistema</h3>
-      <div class="metric" id="systemstate" style="font-size:24px">
-        Pronto
+      <div class="label">Memória JavaScript</div>
+      <div class="value" id="memory">-- <small>MB</small></div>
+      <div class="bar"><div id="membar"></div></div>
+      <div class="muted" id="memorynote">
+        Medição depende do suporte do navegador.
       </div>
-      <p class="muted" id="systemnote">
-        Aguardando leitura das informações disponíveis.
-      </p>
+    </article>
+
+    <article class="card">
+      <div class="label">Estado do monitor</div>
+      <div class="value" style="font-size:27px" id="state">Parado</div>
+      <div class="divider"></div>
+      <div class="status"><span class="dot"></span><span id="statustext">Sistema disponível</span></div>
+      <p class="muted" id="runtime">Nenhuma medição iniciada.</p>
     </article>
   </div>
 
-  <button class="btn" id="startmonitor">Iniciar monitor</button>
-  <button class="btn secondary" id="stopmonitor">Parar monitor</button>
+  <div class="card" style="margin-top:14px">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <h3>Histórico de fluidez</h3>
+        <div class="muted">Variação da taxa de quadros durante o teste.</div>
+      </div>
+      <div class="label" id="average">MÉDIA: -- FPS</div>
+    </div>
 
-  <div class="result" id="monitorresult" aria-live="polite">
-    O monitor está parado. Clique em Iniciar monitor para começar.
+    <canvas id="chart" width="1000" height="180"></canvas>
+
+    <div class="monitor-controls">
+      <button class="btn" id="toggle">Iniciar monitor</button>
+      <button class="btn outline" id="download">Exportar relatório</button>
+      <span class="muted">Atualização automática enquanto estiver ativo.</span>
+    </div>
   </div>
 </section>
 
 <section id="diagnostico" class="section">
-  <h2 class="section-title">Diagnóstico rápido</h2>
-  <p class="muted">
-    Consulta informações que o navegador permite acessar.
-    Não instala programas nem verifica todo o computador.
-  </p>
+  <div class="section-heading">
+    <h2>⌕ Diagnóstico do sistema</h2>
+    <p>Informações que o navegador disponibiliza para esta página.</p>
+  </div>
 
   <div class="grid">
     <article class="card">
-      <h3>Informações do navegador</h3>
-      <button class="btn" id="browsercheck">Consultar</button>
-      <div class="result" id="browserresult">Nenhuma consulta realizada.</div>
+      <div class="feature-icon">◈</div>
+      <h3>Navegador</h3>
+      <div class="result" id="browser">Consultando informações...</div>
     </article>
 
     <article class="card">
-      <h3>Teste de conectividade</h3>
-      <button class="btn" id="connectioncheck">Verificar</button>
-      <div class="result" id="connectionresult">
-        Clique para consultar as informações disponíveis.
-      </div>
+      <div class="feature-icon">⌁</div>
+      <h3>Conectividade</h3>
+      <div class="result" id="connection">Consultando conexão...</div>
     </article>
 
     <article class="card">
-      <h3>Relatório local</h3>
-      <button class="btn" id="report">Gerar relatório</button>
-      <div class="result" id="reportresult">Nenhum relatório gerado.</div>
+      <div class="feature-icon">▤</div>
+      <h3>Relatório</h3>
+      <p class="muted">
+        Gere um arquivo TXT com as informações coletadas durante a sessão.
+      </p>
+      <div class="result">Relatório local disponível para exportação.</div>
     </article>
   </div>
 </section>
 
 <section id="downloads" class="section">
-  <h2 class="section-title">Central de downloads</h2>
-  <p class="muted">
-    Baixe ferramentas de exemplo ou adicione os links dos programas
-    oficiais que você realmente disponibilizar.
-  </p>
+  <div class="section-heading">
+    <h2>⇩ Central de downloads</h2>
+    <p>Ferramentas e recursos do projeto.</p>
+  </div>
 
   <div class="grid">
     <article class="card">
+      <div class="feature-icon">▤</div>
       <h3>Relatório Fluxo FPS</h3>
       <p class="muted">
-        Gera um arquivo de texto com informações de diagnóstico
-        disponíveis no navegador.
+        Exporte as medições e informações disponíveis nesta sessão.
       </p>
-      <button class="btn" id="downloadreport">Baixar relatório</button>
+      <div class="status"><span class="dot"></span> Disponível</div>
     </article>
 
     <article class="card">
+      <div class="feature-icon">◉</div>
       <h3>Monitor de navegador</h3>
       <p class="muted">
-        A ferramenta básica já está incorporada nesta página.
+        Ferramenta incorporada à página para medir sua própria fluidez.
       </p>
-      <a class="btn secondary" href="#monitor">Abrir ferramenta</a>
+      <div class="status"><span class="dot"></span> Disponível</div>
     </article>
 
     <article class="card">
-      <h3>Scanner de segurança</h3>
+      <div class="feature-icon">⬡</div>
+      <h3>Scanner antivírus</h3>
       <p class="muted">
-        O scanner antivírus completo ainda não está implementado.
-        Este site não verifica arquivos em busca de malware.
+        A análise real de arquivos e a detecção de malware ainda precisam
+        ser implementadas.
       </p>
-      <span class="tag">EM DESENVOLVIMENTO</span>
+      <div class="badge">EM DESENVOLVIMENTO</div>
     </article>
   </div>
 </section>
 
 <section id="anticheat" class="section">
-  <h2 class="section-title">Fluxo FPS Anti-cheat</h2>
-  <p class="muted">
-    Área demonstrativa para apresentar o futuro produto de segurança.
-  </p>
+  <div class="section-heading">
+    <h2>⬡ Fluxo FPS Anti-cheat</h2>
+    <p>Área do futuro produto de proteção para jogos.</p>
+  </div>
 
   <div class="grid">
-    <article class="card warning">
-      <span class="tag">PRODUTO EM DESENVOLVIMENTO</span>
-      <h3>Anti-cheat Pro</h3>
-      <div class="price">R$ 30 <small>/ compra</small></div>
-
+    <article class="card">
+      <span class="badge">PRODUTO EM DESENVOLVIMENTO</span>
+      <h3 style="margin-top:18px">Anti-cheat Pro</h3>
+      <div class="price">R$ 30 <small>/ compra planejada</small></div>
       <ul>
-        <li>Projeto de proteção para jogos.</li>
-        <li>Monitoramento a desenvolver.</li>
-        <li>Sistema de licenças a implementar.</li>
-        <li>Atualizações conforme o desenvolvimento.</li>
+        <li>Desenvolvimento do programa de proteção.</li>
+        <li>Monitoramento e validação de segurança.</li>
+        <li>Sistema de licenças.</li>
+        <li>Distribuição segura de atualizações.</li>
       </ul>
-
-      <button class="btn" id="buybutton">Consultar disponibilidade</button>
-
-      <div class="result" id="buyresult">
-        Nenhum pagamento será realizado por esta página.
+      <div class="result">
+        Status: programa ainda não implementado.
+        Nenhum pagamento está sendo processado.
       </div>
     </article>
 
     <article class="card">
-      <h3>O que falta para vender?</h3>
-      <ul>
-        <li>Desenvolver o programa real.</li>
-        <li>Implementar e testar as proteções.</li>
-        <li>Configurar o processamento de pagamentos.</li>
-        <li>Criar um servidor para validar licenças.</li>
-        <li>Disponibilizar downloads seguros.</li>
-      </ul>
+      <h3>Infraestrutura</h3>
       <p class="muted">
-        Não anuncie o produto como funcional antes de concluir
-        e testar esses componentes.
+        O produto precisará de componentes reais antes de ser vendido.
       </p>
+      <ul>
+        <li>Aplicativo de proteção.</li>
+        <li>Servidor de validação.</li>
+        <li>Verificação de licenças.</li>
+        <li>Testes de segurança.</li>
+        <li>Distribuição de versões oficiais.</li>
+      </ul>
     </article>
 
     <article class="card">
-      <h3>Pagamento</h3>
+      <h3>Pagamentos</h3>
+      <div class="feature-icon">R$</div>
       <p class="muted">
-        Para receber pagamentos de verdade, será necessário integrar
-        um provedor, como o Mercado Pago, e validar as transações
-        em um servidor.
+        O checkout precisará ser integrado a um provedor de pagamento,
+        com confirmação da transação no servidor.
       </p>
       <div class="result">
-        Status: nenhum checkout conectado.
+        Nenhum provedor conectado.<br>
+        PIX e checkout ainda não configurados.
       </div>
     </article>
   </div>
 </section>
 
 <section id="assistente" class="section">
-  <h2 class="section-title">Assistente Fluxo</h2>
-  <p class="muted">
-    Um assistente demonstrativo com respostas locais.
-    Ele não utiliza uma IA externa nesta versão.
-  </p>
+  <div class="section-heading">
+    <h2>◉ Assistente Fluxo</h2>
+    <p>Assistente local demonstrativo para dúvidas sobre a plataforma.</p>
+  </div>
 
   <div class="card">
-    <div class="chatbox" id="chatbox" aria-live="polite">
+    <div class="chatbox" id="chatbox">
       <div class="message">
-        <strong>Fluxo:</strong> Olá! Posso explicar as ferramentas
-        disponíveis nesta demonstração. Pergunte sobre monitor,
-        FPS, downloads, anti-cheat ou pagamentos.
+        <strong class="orange">FLUXO:</strong>
+        Olá! Posso explicar o monitor, o diagnóstico, os downloads
+        e o estado de desenvolvimento do anti-cheat.
       </div>
     </div>
 
-    <form id="chatform">
-      <input
-        class="field"
-        id="chatinput"
-        maxlength="500"
-        placeholder="Digite sua pergunta..."
-        autocomplete="off"
-        required
-      >
-      <button class="btn" type="submit">Enviar mensagem</button>
+    <form id="chatform" class="chat-form">
+      <input id="chatinput" maxlength="400"
+        placeholder="Digite sua pergunta..." required>
+      <button class="btn" type="submit">Enviar</button>
     </form>
+
+    <p class="muted">
+      Este assistente usa respostas locais. Não está conectado a uma IA externa.
+    </p>
   </div>
 </section>
 
 </main>
 
 <footer>
-  <strong>FLUXO FPS</strong> · Central de ferramentas gamer<br>
-  Protótipo demonstrativo. Não substitui antivírus ou anti-cheat real.<br>
-  O monitor mede a fluidez desta página, não o FPS dentro dos jogos.
+  <div>
+    <strong class="orange">FLUXO FPS</strong> · Performance Center<br>
+    Protótipo demonstrativo. Não substitui um anti-cheat ou antivírus real.
+  </div>
+  <div>Jogar melhor. Sempre.</div>
 </footer>
 
 <script>
@@ -566,245 +653,284 @@ footer {
 
 const $ = id => document.getElementById(id);
 
-let monitoring = false;
-let animationFrame = null;
-let previousTime = 0;
-let frameCount = 0;
-let fpsValue = 0;
-let latestReport = "";
+let active = false;
+let frameId = null;
+let lastFrame = 0;
+let frames = 0;
+let lastUpdate = 0;
+let startedAt = 0;
+let fps = 0;
+let fpsHistory = [];
+let memoryHistory = [];
 
-function getMemory() {
-  if (performance.memory) {
-    const used = performance.memory.usedJSHeapSize;
-    return {
-      value: (used / 1048576).toFixed(1) + " MB",
-      note: "Memória utilizada pelo JavaScript desta página."
-    };
-  }
+const canvas = $("chart");
+const ctx = canvas.getContext("2d");
+
+function memoryInfo() {
+  const m = performance.memory;
+
+  if (!m) return null;
 
   return {
-    value: "N/D",
-    note: "Este navegador não disponibiliza essa medição."
+    used: m.usedJSHeapSize / 1048576,
+    limit: m.jsHeapSizeLimit / 1048576
   };
 }
 
-function getReport() {
-  const memory = getMemory();
+function drawChart() {
+  const w = canvas.width;
+  const h = canvas.height;
 
-  return [
-    "FLUXO FPS — RELATÓRIO DE DIAGNÓSTICO",
-    "Data: " + new Date().toLocaleString("pt-BR"),
-    "Navegador: " + navigator.userAgent,
-    "Plataforma informada: " + (navigator.platform || "Não disponível"),
-    "Idioma: " + navigator.language,
-    "Núcleos lógicos informados: " +
-      (navigator.hardwareConcurrency || "Não disponível"),
-    "Memória JS: " + memory.value,
-    "Estado do monitor: " + (monitoring ? "Ativo" : "Parado"),
-    "Fluidez da página: " +
-      (monitoring ? fpsValue + " FPS estimados" : "Não medida"),
-    "",
-    "LIMITAÇÕES:",
-    "Este relatório não mede o FPS interno de jogos.",
-    "Não realiza uma varredura antivírus.",
-    "Não implementa um anti-cheat.",
-    "Não verifica a integridade de todo o computador."
-  ].join("\n");
-}
+  ctx.clearRect(0, 0, w, h);
 
-function downloadText(filename, content) {
-  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  ctx.strokeStyle = "#292018";
+  ctx.lineWidth = 1;
 
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+  for (let i = 1; i < 4; i++) {
+    const y = h * i / 4;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.stroke();
+  }
 
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  if (fpsHistory.length < 2) return;
+
+  const max = Math.max(60, ...fpsHistory);
+  const step = w / (fpsHistory.length - 1);
+
+  ctx.beginPath();
+
+  fpsHistory.forEach((value, i) => {
+    const x = i * step;
+    const y = h - Math.min(value / max, 1) * (h - 12) - 6;
+
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+
+  ctx.strokeStyle = "#ff8500";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  const last = fpsHistory[fpsHistory.length - 1];
+  $("average").textContent =
+    "MÉDIA: " +
+    Math.round(fpsHistory.reduce((a, b) => a + b, 0) /
+    fpsHistory.length) + " FPS";
 }
 
 function updateMemory() {
-  const memory = getMemory();
-  $("memory").textContent = memory.value;
-  $("memorynote").textContent = memory.note;
-}
+  const m = memoryInfo();
 
-function monitorLoop(timestamp) {
-  if (!monitoring) return;
-
-  if (previousTime === 0) previousTime = timestamp;
-
-  frameCount++;
-
-  const elapsed = timestamp - previousTime;
-
-  if (elapsed >= 1000) {
-    fpsValue = Math.round(frameCount * 1000 / elapsed);
-
-    $("fps").innerHTML = fpsValue + ' <small>FPS</small>';
-    $("fpsbar").style.width =
-      Math.min(100, fpsValue / 60 * 100) + "%";
-
-    $("systemstate").textContent =
-      fpsValue >= 45 ? "Fluida" :
-      fpsValue >= 25 ? "Moderada" : "Baixa";
-
-    $("systemnote").textContent =
-      "Fluidez estimada da página; não representa o desempenho do jogo.";
-
-    $("monitorresult").textContent =
-      "Monitor ativo. Última estimativa: " + fpsValue +
-      " FPS. Os resultados variam conforme o navegador, a tela e a carga do sistema.";
-
-    previousTime = timestamp;
-    frameCount = 0;
-    updateMemory();
-  }
-
-  animationFrame = requestAnimationFrame(monitorLoop);
-}
-
-$("startmonitor").addEventListener("click", () => {
-  if (monitoring) return;
-
-  monitoring = true;
-  previousTime = 0;
-  frameCount = 0;
-
-  $("monitorresult").textContent = "Iniciando medição...";
-  animationFrame = requestAnimationFrame(monitorLoop);
-});
-
-$("stopmonitor").addEventListener("click", () => {
-  monitoring = false;
-
-  if (animationFrame !== null) {
-    cancelAnimationFrame(animationFrame);
-  }
-
-  animationFrame = null;
-  $("monitorresult").textContent =
-    "Monitor parado. A medição é apenas da fluidez desta página.";
-  $("systemstate").textContent = "Parado";
-});
-
-$("browsercheck").addEventListener("click", () => {
-  $("browserresult").textContent =
-    "Navegador: " + navigator.userAgent +
-    "\nIdioma: " + navigator.language +
-    "\nPlataforma: " + (navigator.platform || "Não disponível") +
-    "\nNúcleos lógicos: " +
-    (navigator.hardwareConcurrency || "Não informado") +
-    "\nConexão segura: " +
-    (window.isSecureContext ? "Sim" : "Não");
-});
-
-$("connectioncheck").addEventListener("click", () => {
-  const connection =
-    navigator.connection ||
-    navigator.mozConnection ||
-    navigator.webkitConnection;
-
-  if (!connection) {
-    $("connectionresult").textContent =
-      "O navegador não disponibiliza informações detalhadas da conexão. " +
-      "Isso não significa que sua internet esteja com problemas.";
+  if (!m) {
+    $("memory").innerHTML = '-- <small>MB</small>';
+    $("memorynote").textContent =
+      "Este navegador não expõe a memória JavaScript.";
+    $("membar").style.width = "0%";
     return;
   }
 
-  $("connectionresult").textContent =
-    "Tipo efetivo: " + (connection.effectiveType || "N/D") +
-    "\nVelocidade estimada: " +
-    (connection.downlink ?? "N/D") + " Mbps" +
-    "\nLatência estimada: " +
-    (connection.rtt ?? "N/D") + " ms" +
-    "\nEconomia de dados: " +
-    (connection.saveData ? "Ativada" : "Desativada ou indisponível") +
-    "\nEstimativas do navegador; não substituem um teste de velocidade.";
-});
+  $("memory").innerHTML =
+    m.used.toFixed(1) + ' <small>MB</small>';
 
-$("report").addEventListener("click", () => {
-  latestReport = getReport();
-  $("reportresult").textContent = latestReport;
-});
+  $("memorynote").textContent =
+    "Memória utilizada pelo JavaScript desta página.";
 
-$("downloadreport").addEventListener("click", () => {
-  downloadText("relatorio-fluxo-fps.txt", getReport());
-});
+  $("membar").style.width =
+    Math.min(100, m.used / m.limit * 100) + "%";
 
-$("buybutton").addEventListener("click", () => {
-  $("buyresult").textContent =
-    "O Anti-cheat Pro ainda está em desenvolvimento. " +
-    "Não há checkout ou cobrança ativos. " +
-    "O preço planejado é R$ 30.";
-});
+  memoryHistory.push({
+    time: new Date().toISOString(),
+    usedMB: Number(m.used.toFixed(2))
+  });
 
-const chatbox = $("chatbox");
-
-function addMessage(text, type) {
-  const message = document.createElement("div");
-  message.className = "message" + (type === "user" ? " user" : "");
-
-  const label = document.createElement("strong");
-  label.textContent = type === "user" ? "Você: " : "Fluxo: ";
-
-  message.appendChild(label);
-  message.appendChild(document.createTextNode(text));
-  chatbox.appendChild(message);
-  chatbox.scrollTop = chatbox.scrollHeight;
+  if (memoryHistory.length > 120) memoryHistory.shift();
 }
 
-function getLocalAnswer(question) {
+function loop(time) {
+  if (!active) return;
+
+  if (lastFrame !== 0) frames++;
+
+  if (time - lastUpdate >= 1000) {
+    const elapsed = time - lastUpdate;
+
+    if (lastUpdate !== 0) {
+      fps = Math.round(frames * 1000 / elapsed);
+
+      $("fps").innerHTML = fps + ' <small>FPS</small>';
+      $("fpsbar").style.width =
+        Math.min(100, fps / 60 * 100) + "%";
+
+      $("fpsnote").textContent =
+        "Última leitura: " + fps +
+        " FPS estimados na animação desta página.";
+
+      fpsHistory.push(fps);
+
+      if (fpsHistory.length > 60) fpsHistory.shift();
+
+      drawChart();
+      updateMemory();
+
+      const seconds = Math.floor((time - startedAt) / 1000);
+
+      $("runtime").textContent =
+        "Tempo de medição: " + seconds + " segundos.";
+
+      $("statustext").textContent =
+        fps >= 45 ? "Fluidez alta na página" :
+        fps >= 25 ? "Fluidez moderada na página" :
+        "Fluidez reduzida na página";
+
+      $("state").textContent =
+        fps >= 45 ? "Fluida" :
+        fps >= 25 ? "Moderada" : "Reduzida";
+    }
+
+    lastUpdate = time;
+    frames = 0;
+  }
+
+  lastFrame = time;
+  frameId = requestAnimationFrame(loop);
+}
+
+$("toggle").addEventListener("click", () => {
+  if (!active) {
+    active = true;
+    startedAt = performance.now();
+    lastFrame = 0;
+    lastUpdate = 0;
+    frames = 0;
+    fpsHistory = [];
+    memoryHistory = [];
+
+    $("toggle").textContent = "Parar monitor";
+    $("state").textContent = "Iniciando";
+    $("statustext").textContent = "Medição em andamento";
+    $("runtime").textContent = "Preparando leitura...";
+
+    frameId = requestAnimationFrame(loop);
+  } else {
+    active = false;
+
+    if (frameId !== null) cancelAnimationFrame(frameId);
+
+    $("toggle").textContent = "Iniciar monitor";
+    $("state").textContent = "Parado";
+    $("statustext").textContent = "Medição pausada";
+    $("runtime").textContent =
+      "Medição encerrada. Os dados permanecem disponíveis para exportação.";
+  }
+});
+
+function browserDetails() {
+  return [
+    "Idioma: " + navigator.language,
+    "Plataforma: " + (navigator.platform || "Não informada"),
+    "Núcleos lógicos: " +
+      (navigator.hardwareConcurrency || "N/D"),
+    "Conexão segura: " +
+      (isSecureContext ? "Sim" : "Não")
+  ].join("\n");
+}
+
+function connectionDetails() {
+  const c = navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection;
+
+  if (!c) {
+    return "Informações detalhadas de conexão não disponíveis neste navegador.";
+  }
+
+  return [
+    "Tipo: " + (c.effectiveType || "N/D"),
+    "Velocidade estimada: " + (c.downlink ?? "N/D") + " Mbps",
+    "Latência estimada: " + (c.rtt ?? "N/D") + " ms"
+  ].join("\n");
+}
+
+$("browser").textContent = browserDetails();
+$("connection").textContent = connectionDetails();
+
+function reportText() {
+  return [
+    "FLUXO FPS — RELATÓRIO",
+    "Data: " + new Date().toLocaleString("pt-BR"),
+    "",
+    "INFORMAÇÕES DO NAVEGADOR",
+    browserDetails(),
+    "",
+    "CONECTIVIDADE",
+    connectionDetails(),
+    "",
+    "ÚLTIMO FPS MEDIDO: " + (active ? fps : fps || "N/D"),
+    "HISTÓRICO DE FPS: " + JSON.stringify(fpsHistory),
+    "HISTÓRICO DE MEMÓRIA: " + JSON.stringify(memoryHistory),
+    "",
+    "LIMITAÇÕES",
+    "A medição de FPS refere-se apenas à fluidez desta página.",
+    "Não mede o FPS interno dos jogos.",
+    "Não realiza varredura antivírus.",
+    "Não implementa anti-cheat real."
+  ].join("\n");
+}
+
+$("download").addEventListener("click", () => {
+  const blob = new Blob([reportText()], {
+    type: "text/plain;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "Fluxo-FPS-Relatorio.txt";
+  a.click();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+function answer(question) {
   const q = question.toLowerCase();
 
   if (q.includes("fps") || q.includes("monitor")) {
-    return "Abra Monitor e clique em Iniciar monitor. A medição representa " +
-      "a fluidez da página, não o FPS interno de um jogo.";
+    return "O monitor mede a fluidez desta página. Clique em Iniciar monitor para acompanhar a estimativa. Ele não lê o FPS interno de jogos.";
+  }
+
+  if (q.includes("memória") || q.includes("memoria")) {
+    return "A memória exibida é a memória JavaScript da página, quando o navegador disponibiliza essa informação. Não representa toda a RAM do computador.";
   }
 
   if (q.includes("anti-cheat") || q.includes("anticheat") ||
       q.includes("anti cheat")) {
-    return "O Anti-cheat Pro ainda não está implementado. Esta página " +
-      "não detecta cheats nem protege partidas.";
-  }
-
-  if (q.includes("pagar") || q.includes("pix") ||
-      q.includes("preço") || q.includes("preco") ||
-      q.includes("mercado pago")) {
-    return "O preço planejado é R$ 30, mas o checkout ainda não está " +
-      "conectado. Nenhum pagamento é processado aqui.";
-  }
-
-  if (q.includes("download") || q.includes("baixar")) {
-    return "Na Central de downloads, você pode baixar o relatório " +
-      "de diagnóstico em formato TXT.";
+    return "O anti-cheat real ainda está em desenvolvimento. Este protótipo não detecta cheats nem protege partidas.";
   }
 
   if (q.includes("vírus") || q.includes("virus") ||
-      q.includes("scanner") || q.includes("antivírus")) {
-    return "O scanner antivírus ainda não está implementado. " +
-      "Não envie arquivos sensíveis para serviços desconhecidos.";
+      q.includes("antivírus") || q.includes("scanner")) {
+    return "O scanner antivírus ainda não foi implementado. O site não examina arquivos em busca de malware.";
   }
 
-  if (q.includes("internet") || q.includes("conexão") ||
-      q.includes("conexao") || q.includes("ping")) {
-    return "Abra Diagnóstico e clique em Verificar na seção de " +
-      "conectividade. Os dados dependem do suporte do navegador.";
+  if (q.includes("pix") || q.includes("pagar") ||
+      q.includes("preço") || q.includes("preco")) {
+    return "O preço planejado para o Anti-cheat Pro é R$ 30. O checkout ainda não está conectado e nenhum pagamento é processado.";
   }
 
-  if (q.includes("ia") || q.includes("inteligência artificial") ||
-      q.includes("inteligencia artificial")) {
-    return "Este assistente usa respostas locais predefinidas. " +
-      "Para utilizar IA externa, será necessária uma integração " +
-      "com uma API por meio de um servidor.";
+  if (q.includes("download") || q.includes("relatório") ||
+      q.includes("relatorio")) {
+    return "Use Exportar relatório na seção Monitor para baixar um arquivo TXT com as informações da sessão.";
   }
 
-  return "Posso ajudar com monitor, FPS, downloads, diagnóstico, " +
-    "anti-cheat ou pagamentos. Este assistente é demonstrativo " +
-    "e ainda não utiliza um modelo de IA externo.";
+  if (q.includes("internet") || q.includes("ping") ||
+      q.includes("conexão") || q.includes("conexao")) {
+    return connectionDetails();
+  }
+
+  return "Posso explicar o monitor, a memória JavaScript, a conectividade, os relatórios e o estado do anti-cheat. Sou um assistente local demonstrativo, sem conexão com IA externa.";
 }
 
 $("chatform").addEventListener("submit", event => {
@@ -815,15 +941,21 @@ $("chatform").addEventListener("submit", event => {
 
   if (!question) return;
 
-  addMessage(question, "user");
+  const user = document.createElement("div");
+  user.className = "message user";
+  user.textContent = "Você: " + question;
+  $("chatbox").appendChild(user);
+
+  const bot = document.createElement("div");
+  bot.className = "message";
+  bot.innerHTML = '<strong class="orange">FLUXO:</strong> ';
+
+  bot.appendChild(document.createTextNode(answer(question)));
+  $("chatbox").appendChild(bot);
+
   input.value = "";
-
-  setTimeout(() => {
-    addMessage(getLocalAnswer(question), "bot");
-  }, 250);
+  $("chatbox").scrollTop = $("chatbox").scrollHeight;
 });
-
-updateMemory();
 </script>
 
 </body>
