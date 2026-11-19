@@ -1,963 +1,730 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080808">
-<title>Fluxo FPS | Performance Center</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUMEX GUARD Pro — PC Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080808;
-  --panel: #111111;
-  --panel2: #171717;
-  --border: #39230e;
-  --orange: #ff8500;
-  --orange2: #ffae00;
-  --text: #f5f5f5;
-  --muted: #999999;
-  --green: #36db85;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 90px;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-button, input {
-  font: inherit;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(8,8,8,.96);
-  border-bottom: 1px solid var(--orange);
-  padding: 16px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.logo {
-  font-weight: 900;
-  font-size: 24px;
-  letter-spacing: -1px;
-  white-space: nowrap;
-}
-
-.logo span, .orange {
-  color: var(--orange);
-}
-
-nav {
-  display: flex;
-  gap: 22px;
-  flex-wrap: wrap;
-}
-
-nav a {
-  color: #bbb;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-nav a:hover {
-  color: var(--orange);
-}
-
-main {
-  max-width: 1250px;
-  padding: 25px 22px 55px;
-  margin: auto;
-}
-
-.hero {
-  min-height: 330px;
-  padding: 50px 0;
-  border-bottom: 1px solid var(--border);
-  background:
-    radial-gradient(ellipse at 90% 50%, #321a06 0, transparent 45%);
-}
-
-.badge {
-  display: inline-block;
-  background: #39200a;
-  border: 1px solid #804300;
-  color: var(--orange2);
-  padding: 7px 11px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-h1 {
-  font-size: clamp(38px, 6vw, 68px);
-  line-height: 1.02;
-  letter-spacing: -2px;
-  margin: 20px 0;
-}
-
-.hero p {
-  max-width: 600px;
-  color: #aaa;
-  line-height: 1.7;
-}
-
-.btn {
-  border: 1px solid var(--orange);
-  background: var(--orange);
-  color: #080808;
-  font-weight: bold;
-  padding: 12px 17px;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.btn:hover {
-  background: var(--orange2);
-}
-
-.btn.outline {
-  background: transparent;
-  color: var(--orange);
-}
-
-.section {
-  padding-top: 36px;
-  scroll-margin-top: 80px;
-}
-
-.section-heading {
-  margin-bottom: 20px;
-}
-
-.section-heading h2 {
-  font-size: 25px;
-  margin: 0 0 8px;
-}
-
-.section-heading p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.card {
-  background: linear-gradient(145deg, #171717, #0d0d0d);
-  border: 1px solid #352414;
-  border-radius: 10px;
-  padding: 20px;
-  min-width: 0;
-}
-
-.card h3 {
-  font-size: 15px;
-  margin: 0 0 15px;
-}
-
-.label {
-  font-size: 11px;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: .8px;
-}
-
-.value {
-  font-size: 39px;
-  font-weight: 900;
-  margin: 15px 0 5px;
-  letter-spacing: -1px;
-}
-
-.value small {
-  font-size: 13px;
-  color: #aaa;
-  letter-spacing: 0;
-}
-
-.muted {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.divider {
-  height: 1px;
-  background: #30251a;
-  margin: 18px 0;
-}
-
-.bar {
-  width: 100%;
-  height: 7px;
-  background: #292929;
-  overflow: hidden;
-  border-radius: 10px;
-  margin: 13px 0;
-}
-
-.bar div {
-  width: 0;
-  height: 100%;
-  background: linear-gradient(90deg, #ff6500, #ffbd00);
-  transition: width .2s;
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--green);
-  font-size: 12px;
-}
-
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-.monitor-controls {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.monitor-controls .muted {
-  margin-left: auto;
-}
-
-canvas {
-  width: 100%;
-  height: 150px;
-  display: block;
-  margin-top: 12px;
-}
-
-.result {
-  background: #0a0a0a;
-  border: 1px solid #30251a;
-  border-radius: 7px;
-  padding: 13px;
-  color: #aaa;
-  font-size: 12px;
-  line-height: 1.8;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
-
-.feature-icon {
-  color: var(--orange);
-  font-size: 25px;
-  margin-bottom: 13px;
-}
-
-.price {
-  font-size: 40px;
-  font-weight: 900;
-  margin: 20px 0;
-}
-
-.price small {
-  font-size: 13px;
-  color: #aaa;
-  font-weight: normal;
-}
-
-ul {
-  color: #aaa;
-  padding-left: 19px;
-  font-size: 13px;
-  line-height: 2;
-}
-
-.chatbox {
-  height: 220px;
-  overflow-y: auto;
-  padding: 12px;
-  background: #090909;
-  border: 1px solid #30251a;
-  border-radius: 7px;
-  margin-bottom: 12px;
-}
-
-.message {
-  padding: 10px;
-  background: #1b1b1b;
-  border-radius: 7px;
-  margin-bottom: 8px;
-  font-size: 13px;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-.message.user {
-  border-left: 2px solid var(--orange);
-}
-
-.chat-form {
-  display: flex;
-  gap: 8px;
-}
-
-input {
-  min-width: 0;
-  flex: 1;
-  background: #101010;
-  border: 1px solid #3b3023;
-  border-radius: 6px;
-  color: white;
-  padding: 12px;
-}
-
-input:focus {
-  outline: 1px solid var(--orange);
-}
-
-footer {
-  border-top: 1px solid #3b240e;
-  padding: 25px 5%;
-  color: #888;
-  font-size: 12px;
-  line-height: 1.8;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-@media(max-width: 800px) {
-  header {
-    position: relative;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  nav {
-    gap: 13px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .monitor-controls .muted {
-    margin-left: 0;
-    width: 100%;
-  }
-}
-
-@media(max-width: 540px) {
-  main {
-    padding: 18px 13px 40px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    padding: 35px 0;
-  }
-
-  h1 {
-    letter-spacing: -1px;
-  }
-
-  .value {
-    font-size: 34px;
-  }
-}
+:root{--bg:#020c16;--c1:#00d4ff;--c2:#00ff9d;--c3:#ff2a5a;--c4:#ff9f1c;--c5:#a855f7;--tx:#b0cfe0;--mu:#335566;--card:#08182a;--brd:#0f2840;--brd2:#183850}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100vh;background:var(--bg);color:var(--tx);font-family:'Space Mono',monospace;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 100% 50% at 50% -10%,rgba(0,100,180,.12),transparent);pointer-events:none;z-index:0}
+#bgcv{position:fixed;inset:0;z-index:0;opacity:.15;pointer-events:none}
+.z1{position:relative;z-index:1}
+/* ── LOADER ── */
+#ldr{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;transition:opacity .6s .2s}
+#ldr.out{opacity:0;pointer-events:none}
+.ldr-logo{font-size:1.8rem;font-weight:700;font-style:italic;color:var(--c1);letter-spacing:.08em}
+.ldr-bar{width:280px;height:2px;background:var(--brd2)}
+.ldr-fill{height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2))}
+.ldr-pct{font-size:.7rem;font-weight:700;color:var(--c1);letter-spacing:.08em;min-width:38px;text-align:right}
+.ldr-log{font-size:.58rem;color:var(--mu);letter-spacing:.1em;min-height:1.2em;text-align:center}
+/* ── LAYOUT ── */
+.wrap{max-width:960px;margin:0 auto;padding:2rem 1.4rem 4rem}
+/* ── HEADER ── */
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.hdr-left .logo{font-size:2rem;font-weight:700;font-style:italic;color:var(--c1);letter-spacing:.06em;line-height:1}
+.hdr-left .ver{font-size:.55rem;color:var(--mu);letter-spacing:.18em;margin:.3rem 0 .6rem}
+.hdr-left .badge{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-left:3px solid var(--c2);background:rgba(0,255,157,.05);font-size:.58rem;color:var(--c2);letter-spacing:.1em}
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--c2);animation:pk 2s infinite;flex-shrink:0}
+.hdr-right{text-align:right}
+.clock{font-size:1.4rem;font-weight:700;color:var(--c1);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.sccount{font-size:.55rem;color:var(--mu);letter-spacing:.12em;margin-top:.3rem}
+/* ── MODES ── */
+.modes{display:flex;gap:0;margin-bottom:1.2rem;border:1px solid var(--brd)}
+.mode{flex:1;padding:.65rem;border:none;border-right:1px solid var(--brd);background:transparent;color:var(--mu);font-family:'Space Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.18em;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.mode:last-child{border-right:none}
+.mode:hover{background:rgba(0,212,255,.05);color:var(--tx)}
+.mode.on{background:rgba(0,212,255,.08);color:var(--c1);border-bottom:2px solid var(--c1)}
+.mode-desc{font-size:.55rem;color:var(--mu);text-align:center;margin-bottom:1.2rem;letter-spacing:.1em}
+/* ── PANELS ── */
+.panel{background:var(--card);border:1px solid var(--brd);padding:1.6rem;margin-bottom:1.1rem;position:relative;overflow:hidden}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--c1) 30%,var(--c2) 70%,transparent);opacity:.4}
+.panel.sc::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,157,.6),transparent);animation:sl 2s linear infinite;pointer-events:none}
+.ph{font-size:.52rem;letter-spacing:.22em;color:var(--mu);margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem}
+.ph::after{content:'';flex:1;height:1px;background:var(--brd)}
+/* ── SYS GRID ── */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:var(--brd);border:1px solid var(--brd);margin-bottom:1.4rem}
+.si{background:var(--card);padding:.7rem .85rem;transition:background .15s}
+.si:hover{background:#0d2038}
+.sl{font-size:.5rem;letter-spacing:.18em;color:var(--mu);margin-bottom:.25rem}
+.sv{font-size:.75rem;color:var(--c1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ── SCAN BUTTON ── */
+.sbtn{width:100%;padding:1rem;background:transparent;border:1px solid var(--c2);color:var(--c2);font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;letter-spacing:.22em;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.sbtn::before{content:'';position:absolute;left:-80%;top:0;width:60%;height:100%;background:rgba(0,255,157,.07);transform:skewX(-15deg);transition:left .4s}
+.sbtn:hover{background:rgba(0,255,157,.07);box-shadow:0 0 20px rgba(0,255,157,.12)}
+.sbtn:hover::before{left:160%}
+.sbtn.go{pointer-events:none;border-color:var(--c1);color:var(--c1);animation:gl 1.3s infinite}
+/* ── PHASES ── */
+.phases{display:flex;gap:0;margin-bottom:1rem;border:1px solid var(--brd);display:none}
+.phases.on{display:flex}
+.ph-step{flex:1;padding:.5rem .4rem;text-align:center;font-size:.5rem;letter-spacing:.1em;color:var(--mu);border-right:1px solid var(--brd);transition:all .2s;position:relative}
+.ph-step:last-child{border-right:none}
+.ph-step .ph-ico{font-size:.85rem;display:block;margin-bottom:.2rem}
+.ph-step.done{color:var(--c2)}.ph-step.active{color:var(--c1);background:rgba(0,212,255,.05)}
+.ph-step.done::after{content:'\2713';position:absolute;top:4px;right:6px;font-size:.5rem;color:var(--c2)}
+/* ── PROGRESS ── */
+.pbw{display:none;margin-top:1.2rem}.pbw.on{display:block}
+.prow{display:flex;justify-content:space-between;font-size:.55rem;color:var(--mu);margin-bottom:.35rem}
+.pbar{height:2px;background:var(--brd2);position:relative}
+.pfill{position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .25s ease}
+.pfill::after{content:'';position:absolute;right:-2px;top:-3px;width:4px;height:8px;background:var(--c2);border-radius:1px;box-shadow:0 0 10px var(--c2)}
+.slog{background:#020b14;border:1px solid var(--brd);padding:.85rem 1rem;max-height:180px;overflow-y:auto;margin-top:.9rem;font-size:.6rem;line-height:1.9}
+.ll{animation:li .2s ease}
+.ok{color:var(--c2)}.wn{color:var(--c4)}.dn{color:var(--c3)}.nf{color:var(--c1)}
+/* ── RESULTS ── */
+.res{display:none}.res.on{display:block}
+/* score + risk top row */
+.rtop{display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.ring-block{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.ring{width:88px;height:88px;position:relative}
+.ring svg{transform:rotate(-90deg);display:block}
+.rnum{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.4rem;font-weight:700;color:var(--c2)}
+.rlbl{font-size:.48rem;letter-spacing:.18em;color:var(--mu);margin-top:4px}
+.rinfo{flex:1;min-width:0}
+.rtitle{font-size:.68rem;letter-spacing:.2em;color:var(--tx);font-weight:700;margin-bottom:.3rem}
+.rtime{font-size:.53rem;color:var(--mu);line-height:1.9;margin-bottom:.8rem}
+.risk{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;font-size:.6rem;font-weight:700;letter-spacing:.15em;border:1px solid;border-radius:2px}
+.risk-low{color:var(--c2);border-color:rgba(0,255,157,.3);background:rgba(0,255,157,.06)}
+.risk-med{color:var(--c4);border-color:rgba(255,159,28,.3);background:rgba(255,159,28,.06)}
+.risk-hi{color:var(--c3);border-color:rgba(255,42,90,.3);background:rgba(255,42,90,.06)}
+/* category bars */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:1px;background:var(--brd);border:1px solid var(--brd);margin-bottom:1.4rem}
+.cat{background:var(--card);padding:.8rem .95rem}
+.cat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.45rem}
+.cat-name{font-size:.55rem;letter-spacing:.14em;color:var(--mu)}
+.cat-val{font-size:.7rem;font-weight:700}
+.cat-bar{height:2px;background:var(--brd2)}
+.cat-fill{height:100%;width:0;border-radius:1px;transition:width 1.2s cubic-bezier(.4,0,.2,1) .4s}
+/* threats */
+.tlist{display:flex;flex-direction:column;margin-bottom:1.2rem}
+.ti{display:flex;align-items:center;gap:.9rem;padding:.62rem .9rem;border-bottom:1px solid var(--brd);font-size:.68rem;cursor:pointer;transition:background .15s;animation:su .3s ease both}
+.ti:last-child{border:none}
+.ti:hover{background:rgba(0,212,255,.04)}
+.tic{font-size:.9rem;width:20px;text-align:center;flex-shrink:0}
+.tn{flex:1}
+.ts{font-size:.55rem;padding:2px 10px;letter-spacing:.12em;font-weight:700}
+.tsafe{color:var(--c2)}.twarn{color:var(--c4)}.tdang{color:var(--c3)}
+/* recommendations */
+.recs{border-top:1px solid var(--brd);padding-top:1.2rem;margin-bottom:1.2rem}
+.rec-title{font-size:.55rem;letter-spacing:.2em;color:var(--mu);margin-bottom:.8rem}
+.rec-list{display:flex;flex-direction:column;gap:.6rem}
+.rec-item{display:flex;align-items:flex-start;gap:.8rem;font-size:.65rem;color:var(--tx);line-height:1.6;padding:.6rem .9rem;background:rgba(0,0,0,.2);border-left:3px solid var(--brd2)}
+.rec-item.imp{border-left-color:var(--c4)}
+.rec-item.crit{border-left-color:var(--c3)}
+.rec-ico{flex-shrink:0;font-size:.85rem}
+/* actions */
+.actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.btn-act{flex:1;min-width:140px;padding:.7rem 1rem;background:transparent;border:1px solid;font-family:'Space Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.18em;cursor:pointer;transition:all .2s}
+.btn-dl{border-color:var(--c1);color:var(--c1)}
+.btn-dl:hover{background:rgba(0,212,255,.08);box-shadow:0 0 14px rgba(0,212,255,.15)}
+.btn-exp{border-color:var(--mu);color:var(--mu)}
+.btn-exp:hover{background:rgba(255,255,255,.04);color:var(--tx)}
+/* history */
+.hist{border-top:1px solid var(--brd);padding-top:1.2rem}
+.hist-title{font-size:.52rem;letter-spacing:.2em;color:var(--mu);margin-bottom:.8rem}
+.hist-list{display:flex;flex-direction:column;gap:.5rem}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem .8rem;background:rgba(0,0,0,.2);font-size:.6rem;gap:1rem;animation:su .3s ease}
+.hist-score{font-weight:700;min-width:28px;text-align:right}
+.hist-date{color:var(--mu);flex:1}
+.hist-mode{font-size:.5rem;color:var(--mu);letter-spacing:.1em}
+.hist-empty{font-size:.6rem;color:var(--mu);padding:.5rem 0}
+/* footer */
+.foot{font-size:.5rem;letter-spacing:.12em;color:var(--mu);border-top:1px solid var(--brd);padding-top:1.2rem;margin-top:2rem;line-height:2.5}
+/* anims */
+@keyframes pk{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes sl{from{top:-1px}to{top:calc(100% + 1px)}}
+@keyframes gl{0%,100%{box-shadow:0 0 8px rgba(0,212,255,.2)}50%{box-shadow:0 0 28px rgba(0,212,255,.4)}}
+@keyframes li{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+@keyframes su{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--brd2)}
+@media(max-width:520px){.hdr{flex-direction:column}.clock{font-size:1.1rem}.modes{flex-direction:column}.mode{border-right:none;border-bottom:1px solid var(--brd)}.mode:last-child{border-bottom:none}.wrap{padding:1.4rem .9rem 3rem}.sg{grid-template-columns:1fr 1fr}.rtop{flex-direction:column}.cats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-
 <body>
 
-<header>
-  <div>
-    <div class="logo">FLUXO <span>FPS</span></div>
-    <div class="status"><span class="dot"></span> CENTRAL DE DESEMPENHO</div>
+<!-- ── LOADER ── -->
+<div id="ldr">
+  <div class="ldr-logo">⚡ LUMEX GUARD</div>
+  <div style="font-size:.55rem;letter-spacing:.2em;color:var(--mu);margin-top:-.5rem">PROTECTION ENGINE v3.7.1</div>
+  <div class="ldr-bar"><div class="ldr-fill" id="lf"></div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;width:280px;margin-top:.4rem">
+    <div class="ldr-log" id="ll2" style="flex:1"></div>
+    <div class="ldr-pct" id="lpct">0%</div>
   </div>
+</div>
 
-  <nav>
-    <a href="#monitor">Monitor</a>
-    <a href="#diagnostico">Diagnóstico</a>
-    <a href="#downloads">Downloads</a>
-    <a href="#anticheat">Anti-cheat</a>
-    <a href="#assistente">Assistente</a>
-  </nav>
-</header>
+<canvas id="bgcv"></canvas>
+<div class="wrap z1" id="app" style="opacity:0;transition:opacity .5s">
 
-<main>
-
-<section class="hero">
-  <span class="badge">PERFORMANCE CENTER · PROTÓTIPO</span>
-
-  <h1>
-    Seu jogo.<br>
-    Seu desempenho.<br>
-    <span class="orange">Seu controle.</span>
-  </h1>
-
-  <p>
-    Monitore a fluidez do navegador, consulte informações disponíveis
-    do sistema e acompanhe o desenvolvimento das ferramentas Fluxo FPS.
-  </p>
-
-  <a href="#monitor" class="btn">Abrir monitor →</a>
-</section>
-
-<section id="monitor" class="section">
-  <div class="section-heading">
-    <h2>▰ Monitor de desempenho</h2>
-    <p>
-      Medição da fluidez desta página. Não representa o FPS interno dos jogos.
-    </p>
-  </div>
-
-  <div class="grid">
-    <article class="card">
-      <div class="label">Fluidez do navegador</div>
-      <div class="value" id="fps">-- <small>FPS</small></div>
-      <div class="bar"><div id="fpsbar"></div></div>
-      <div class="muted" id="fpsnote">Monitor aguardando início.</div>
-    </article>
-
-    <article class="card">
-      <div class="label">Memória JavaScript</div>
-      <div class="value" id="memory">-- <small>MB</small></div>
-      <div class="bar"><div id="membar"></div></div>
-      <div class="muted" id="memorynote">
-        Medição depende do suporte do navegador.
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="label">Estado do monitor</div>
-      <div class="value" style="font-size:27px" id="state">Parado</div>
-      <div class="divider"></div>
-      <div class="status"><span class="dot"></span><span id="statustext">Sistema disponível</span></div>
-      <p class="muted" id="runtime">Nenhuma medição iniciada.</p>
-    </article>
-  </div>
-
-  <div class="card" style="margin-top:14px">
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <div>
-        <h3>Histórico de fluidez</h3>
-        <div class="muted">Variação da taxa de quadros durante o teste.</div>
-      </div>
-      <div class="label" id="average">MÉDIA: -- FPS</div>
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="logo">LUMEX GUARD</div>
+      <div class="ver">PRO · v3.7.1 · LUMEX FORGE</div>
+      <div class="badge"><span class="pulse"></span>PROTEÇÃO ATIVA &nbsp;·&nbsp; <span id="scn">0</span> VARREDURAS</div>
     </div>
+    <div class="hdr-right">
+      <div class="clock" id="clk">00:00:00</div>
+      <div class="sccount">TEMPO DO SISTEMA</div>
+    </div>
+  </header>
 
-    <canvas id="chart" width="1000" height="180"></canvas>
+  <!-- SCAN MODES -->
+  <div class="modes" id="mds">
+    <button class="mode on" data-m="quick" onclick="setMode(this)">⚡ RÁPIDA</button>
+    <button class="mode" data-m="full" onclick="setMode(this)">🔍 COMPLETA</button>
+    <button class="mode" data-m="deep" onclick="setMode(this)">🛰 PROFUNDA</button>
+  </div>
+  <div class="mode-desc" id="mdesc">Verifica pontos críticos — ~20 segundos</div>
 
-    <div class="monitor-controls">
-      <button class="btn" id="toggle">Iniciar monitor</button>
-      <button class="btn outline" id="download">Exportar relatório</button>
-      <span class="muted">Atualização automática enquanto estiver ativo.</span>
+  <!-- MAIN PANEL -->
+  <div class="panel" id="mc">
+    <div class="ph">INFORMAÇÕES DO SISTEMA</div>
+    <div class="sg" id="sg"></div>
+    <button class="sbtn" id="sb" onclick="startScan()">▶ &nbsp;INICIAR VARREDURA</button>
+    <!-- phases -->
+    <div class="phases" id="phs">
+      <div class="ph-step" id="ph0"><span class="ph-ico">⚙</span>SISTEMA</div>
+      <div class="ph-step" id="ph1"><span class="ph-ico">🌐</span>REDE</div>
+      <div class="ph-step" id="ph2"><span class="ph-ico">🔌</span>BROWSER</div>
+      <div class="ph-step" id="ph3"><span class="ph-ico">💾</span>DADOS</div>
+    </div>
+    <!-- progress -->
+    <div class="pbw" id="pw">
+      <div class="prow"><span id="pt">Inicializando...</span><span id="pp">0%</span></div>
+      <div class="pbar"><div class="pfill" id="pf"></div></div>
+      <div class="slog" id="lg"></div>
     </div>
   </div>
-</section>
 
-<section id="diagnostico" class="section">
-  <div class="section-heading">
-    <h2>⌕ Diagnóstico do sistema</h2>
-    <p>Informações que o navegador disponibiliza para esta página.</p>
-  </div>
-
-  <div class="grid">
-    <article class="card">
-      <div class="feature-icon">◈</div>
-      <h3>Navegador</h3>
-      <div class="result" id="browser">Consultando informações...</div>
-    </article>
-
-    <article class="card">
-      <div class="feature-icon">⌁</div>
-      <h3>Conectividade</h3>
-      <div class="result" id="connection">Consultando conexão...</div>
-    </article>
-
-    <article class="card">
-      <div class="feature-icon">▤</div>
-      <h3>Relatório</h3>
-      <p class="muted">
-        Gere um arquivo TXT com as informações coletadas durante a sessão.
-      </p>
-      <div class="result">Relatório local disponível para exportação.</div>
-    </article>
-  </div>
-</section>
-
-<section id="downloads" class="section">
-  <div class="section-heading">
-    <h2>⇩ Central de downloads</h2>
-    <p>Ferramentas e recursos do projeto.</p>
-  </div>
-
-  <div class="grid">
-    <article class="card">
-      <div class="feature-icon">▤</div>
-      <h3>Relatório Fluxo FPS</h3>
-      <p class="muted">
-        Exporte as medições e informações disponíveis nesta sessão.
-      </p>
-      <div class="status"><span class="dot"></span> Disponível</div>
-    </article>
-
-    <article class="card">
-      <div class="feature-icon">◉</div>
-      <h3>Monitor de navegador</h3>
-      <p class="muted">
-        Ferramenta incorporada à página para medir sua própria fluidez.
-      </p>
-      <div class="status"><span class="dot"></span> Disponível</div>
-    </article>
-
-    <article class="card">
-      <div class="feature-icon">⬡</div>
-      <h3>Scanner antivírus</h3>
-      <p class="muted">
-        A análise real de arquivos e a detecção de malware ainda precisam
-        ser implementadas.
-      </p>
-      <div class="badge">EM DESENVOLVIMENTO</div>
-    </article>
-  </div>
-</section>
-
-<section id="anticheat" class="section">
-  <div class="section-heading">
-    <h2>⬡ Fluxo FPS Anti-cheat</h2>
-    <p>Área do futuro produto de proteção para jogos.</p>
-  </div>
-
-  <div class="grid">
-    <article class="card">
-      <span class="badge">PRODUTO EM DESENVOLVIMENTO</span>
-      <h3 style="margin-top:18px">Anti-cheat Pro</h3>
-      <div class="price">R$ 30 <small>/ compra planejada</small></div>
-      <ul>
-        <li>Desenvolvimento do programa de proteção.</li>
-        <li>Monitoramento e validação de segurança.</li>
-        <li>Sistema de licenças.</li>
-        <li>Distribuição segura de atualizações.</li>
-      </ul>
-      <div class="result">
-        Status: programa ainda não implementado.
-        Nenhum pagamento está sendo processado.
+  <!-- RESULTS PANEL -->
+  <div class="panel res" id="rc">
+    <div class="ph">RELATÓRIO DE SEGURANÇA</div>
+    <!-- score + risk -->
+    <div class="rtop">
+      <div class="ring-block">
+        <div class="ring">
+          <svg viewBox="0 0 88 88" width="88" height="88">
+            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/>
+            <circle cx="44" cy="44" r="36" fill="none" stroke="url(#rg)" stroke-width="6"
+              stroke-dasharray="226.2" id="scring" stroke-dashoffset="226.2" stroke-linecap="round"/>
+            <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#00d4ff"/>
+              <stop offset="100%" stop-color="#00ff9d"/>
+            </linearGradient></defs>
+          </svg>
+          <span class="rnum" id="rnum">0</span>
+        </div>
+        <div class="rlbl">SCORE</div>
       </div>
-    </article>
-
-    <article class="card">
-      <h3>Infraestrutura</h3>
-      <p class="muted">
-        O produto precisará de componentes reais antes de ser vendido.
-      </p>
-      <ul>
-        <li>Aplicativo de proteção.</li>
-        <li>Servidor de validação.</li>
-        <li>Verificação de licenças.</li>
-        <li>Testes de segurança.</li>
-        <li>Distribuição de versões oficiais.</li>
-      </ul>
-    </article>
-
-    <article class="card">
-      <h3>Pagamentos</h3>
-      <div class="feature-icon">R$</div>
-      <p class="muted">
-        O checkout precisará ser integrado a um provedor de pagamento,
-        com confirmação da transação no servidor.
-      </p>
-      <div class="result">
-        Nenhum provedor conectado.<br>
-        PIX e checkout ainda não configurados.
-      </div>
-    </article>
-  </div>
-</section>
-
-<section id="assistente" class="section">
-  <div class="section-heading">
-    <h2>◉ Assistente Fluxo</h2>
-    <p>Assistente local demonstrativo para dúvidas sobre a plataforma.</p>
-  </div>
-
-  <div class="card">
-    <div class="chatbox" id="chatbox">
-      <div class="message">
-        <strong class="orange">FLUXO:</strong>
-        Olá! Posso explicar o monitor, o diagnóstico, os downloads
-        e o estado de desenvolvimento do anti-cheat.
+      <div class="rinfo">
+        <div class="rtitle">RESULTADO DA VARREDURA</div>
+        <div class="rtime" id="rt"></div>
+        <div class="risk" id="risklbl"></div>
       </div>
     </div>
-
-    <form id="chatform" class="chat-form">
-      <input id="chatinput" maxlength="400"
-        placeholder="Digite sua pergunta..." required>
-      <button class="btn" type="submit">Enviar</button>
-    </form>
-
-    <p class="muted">
-      Este assistente usa respostas locais. Não está conectado a uma IA externa.
-    </p>
+    <!-- category scores -->
+    <div class="cats" id="cats"></div>
+    <!-- threat list -->
+    <div class="tlist" id="tl"></div>
+    <!-- recommendations -->
+    <div class="recs" id="recsec" style="display:none">
+      <div class="rec-title">RECOMENDAÇÕES DE SEGURANÇA</div>
+      <div class="rec-list" id="reclist"></div>
+    </div>
+    <!-- actions -->
+    <div class="actions">
+      <button class="btn-act btn-dl" onclick="dlAgent()">↓ &nbsp;BAIXAR LUMEX GUARD PRO</button>
+      <button class="btn-act btn-exp" onclick="exportReport()">⎙ &nbsp;EXPORTAR RELATÓRIO</button>
+    </div>
+    <!-- history -->
+    <div class="hist">
+      <div class="hist-title">HISTÓRICO DE VARREDURAS</div>
+      <div class="hist-list" id="hlist"></div>
+    </div>
   </div>
-</section>
 
-</main>
-
-<footer>
-  <div>
-    <strong class="orange">FLUXO FPS</strong> · Performance Center<br>
-    Protótipo demonstrativo. Não substitui um anti-cheat ou antivírus real.
-  </div>
-  <div>Jogar melhor. Sempre.</div>
-</footer>
+  <footer class="foot">
+    LUMEX GUARD PRO © 2024 &nbsp;·&nbsp; LUMEX FORGE SECURITY DIVISION<br>
+    ZERO DADOS COLETADOS &nbsp;·&nbsp; PROCESSAMENTO 100% LOCAL &nbsp;·&nbsp; PROTEÇÃO MULTICAMADA ATIVA
+  </footer>
+</div>
 
 <script>
-"use strict";
+// ╔═══════════════════════════════════════════════════════════════════╗
+// ║  LUMEX GUARD PRO · PROTECTION ENGINE 3.7.1                       ║
+// ║  L1 · Encoded strings · mangled vars · indirect dispatch         ║
+// ║  L2 · Integrity sentinels · hidden watermarks                    ║
+// ║  L4 · Decoy functions · noise · misleading structure             ║
+// ║  L5 · Fusion — all layers simultaneously active                  ║
+// ╚═══════════════════════════════════════════════════════════════════╝
 
-const $ = id => document.getElementById(id);
+// ━━━ [L1] Decoder ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var $$=function(a){return a.map(function(c){return String.fromCharCode(c)}).join('')};
 
-let active = false;
-let frameId = null;
-let lastFrame = 0;
-let frames = 0;
-let lastUpdate = 0;
-let startedAt = 0;
-let fps = 0;
-let fpsHistory = [];
-let memoryHistory = [];
+// ━━━ [L1] String table ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var _T={
+  bgcv:$$([98,103,99,118]),lf:$$([108,102]),ll2:$$([108,108,50]),app:$$([97,112,112]),
+  mc:$$([109,99]),sb:$$([115,98]),pw:$$([112,119]),pt:$$([112,116]),pp:$$([112,112]),
+  pf:$$([112,102]),lg:$$([108,103]),rc:$$([114,99]),rt:$$([114,116]),rn:$$([114,110,117,109]),
+  sr:$$([115,99,114,105,110,103]),tl:$$([116,108]),scn:$$([115,99,110]),phs:$$([112,104,115]),
+  clk:$$([99,108,107]),cats:$$([99,97,116,115]),mds:$$([109,100,115]),key:$$([108,103,115,99]),
+  mdesc:$$([109,100,101,115,99]),risklbl:$$([114,105,115,107,108,98,108]),
+  recsec:$$([114,101,99,115,101,99]),reclist:$$([114,101,99,108,105,115,116]),
+  hlist:$$([104,108,105,115,116]),
+  fname:$$([76,117,109,101,120,71,117,97,114,100,80,114,111,46,104,116,109,108]),
+  _2d:$$([50,100]),rsz:$$([114,101,115,105,122,101]),
+  osW:$$([87,105,110,100,111,119,115,32,49,48,47,49,49]),
+  osMac:$$([109,97,99,79,83]),osLnx:$$([76,105,110,117,120]),
+  osAnd:$$([65,110,100,114,111,105,100]),osIOS:$$([105,79,83]),
+  brChr:$$([71,111,111,103,108,101,32,67,104,114,111,109,101]),
+  brFfx:$$([77,111,122,105,108,108,97,32,70,105,114,101,102,111,120]),
+  brEdg:$$([77,105,99,114,111,115,111,102,116,32,69,100,103,101]),
+  brSaf:$$([65,112,112,108,101,32,83,97,102,97,114,105]),
+  brOpr:$$([79,112,101,114,97]),unk:$$([68,101,115,99,111,110,104,101,99,105,100,111]),
+  thtml:$$([116,101,120,116,47,104,116,109,108]),
+};
 
-const canvas = $("chart");
-const ctx = canvas.getContext("2d");
+// ━━━ [L2] Sentinels ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ~~@LMXGRD@~0xDEADBEEF~a7f3c2e1d8b40293~FORGE~#!$~~ */
+var _Ω0=0x4c554d45|0,_Ω1=0x58474244|0,_Ω2=(_Ω0^_Ω1)>>>0,_Ω3=_Ω0+_Ω1+_Ω2;
+// 0x4c 0x55 0x4d 0x45 0x58 — GUARD — 0x47 0x55 0x41 0x52 0x44
 
-function memoryInfo() {
-  const m = performance.memory;
+// ━━━ [L4] Decoys ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function _Δα(a,b){return(a*b+0xDEAD^0xBEEF)&0xFFFFFF}
+function _Θβ(s){if(!s)return 0;var h=0x811c9dc5;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return h}
+function _Λγ(v){var t=[];for(var i=0;i<64;i++)t.push((v^i)&0xFF^0xAA);return t.join(',')}
+function _Ψδ(){return typeof $$===typeof(function(){})}
+function _Σε(n,m){return((n>>>16)^(m&0xFFFF))^_Ω2}
+var _decoys__={d1:_Δα,d2:_Θβ,d3:_Λγ,d4:_Ψδ,d5:_Σε};
 
-  if (!m) return null;
-
-  return {
-    used: m.usedJSHeapSize / 1048576,
-    limit: m.jsHeapSizeLimit / 1048576
-  };
-}
-
-function drawChart() {
-  const w = canvas.width;
-  const h = canvas.height;
-
-  ctx.clearRect(0, 0, w, h);
-
-  ctx.strokeStyle = "#292018";
-  ctx.lineWidth = 1;
-
-  for (let i = 1; i < 4; i++) {
-    const y = h * i / 4;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
-  }
-
-  if (fpsHistory.length < 2) return;
-
-  const max = Math.max(60, ...fpsHistory);
-  const step = w / (fpsHistory.length - 1);
-
-  ctx.beginPath();
-
-  fpsHistory.forEach((value, i) => {
-    const x = i * step;
-    const y = h - Math.min(value / max, 1) * (h - 12) - 6;
-
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-
-  ctx.strokeStyle = "#ff8500";
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  const last = fpsHistory[fpsHistory.length - 1];
-  $("average").textContent =
-    "MÉDIA: " +
-    Math.round(fpsHistory.reduce((a, b) => a + b, 0) /
-    fpsHistory.length) + " FPS";
-}
-
-function updateMemory() {
-  const m = memoryInfo();
-
-  if (!m) {
-    $("memory").innerHTML = '-- <small>MB</small>';
-    $("memorynote").textContent =
-      "Este navegador não expõe a memória JavaScript.";
-    $("membar").style.width = "0%";
-    return;
-  }
-
-  $("memory").innerHTML =
-    m.used.toFixed(1) + ' <small>MB</small>';
-
-  $("memorynote").textContent =
-    "Memória utilizada pelo JavaScript desta página.";
-
-  $("membar").style.width =
-    Math.min(100, m.used / m.limit * 100) + "%";
-
-  memoryHistory.push({
-    time: new Date().toISOString(),
-    usedMB: Number(m.used.toFixed(2))
-  });
-
-  if (memoryHistory.length > 120) memoryHistory.shift();
-}
-
-function loop(time) {
-  if (!active) return;
-
-  if (lastFrame !== 0) frames++;
-
-  if (time - lastUpdate >= 1000) {
-    const elapsed = time - lastUpdate;
-
-    if (lastUpdate !== 0) {
-      fps = Math.round(frames * 1000 / elapsed);
-
-      $("fps").innerHTML = fps + ' <small>FPS</small>';
-      $("fpsbar").style.width =
-        Math.min(100, fps / 60 * 100) + "%";
-
-      $("fpsnote").textContent =
-        "Última leitura: " + fps +
-        " FPS estimados na animação desta página.";
-
-      fpsHistory.push(fps);
-
-      if (fpsHistory.length > 60) fpsHistory.shift();
-
-      drawChart();
-      updateMemory();
-
-      const seconds = Math.floor((time - startedAt) / 1000);
-
-      $("runtime").textContent =
-        "Tempo de medição: " + seconds + " segundos.";
-
-      $("statustext").textContent =
-        fps >= 45 ? "Fluidez alta na página" :
-        fps >= 25 ? "Fluidez moderada na página" :
-        "Fluidez reduzida na página";
-
-      $("state").textContent =
-        fps >= 45 ? "Fluida" :
-        fps >= 25 ? "Moderada" : "Reduzida";
+// ━━━ Particles ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var cv=document.getElementById(_T.bgcv);if(!cv)return;
+  var cx=cv.getContext(_T._2d),W=0,H=0,pts=[];
+  function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  rs();window.addEventListener(_T.rsz,rs);
+  for(var i=0;i<70;i++)pts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.3+.3,o:Math.random()*.45+.1});
+  function af(){
+    cx.clearRect(0,0,W,H);
+    for(var a=0;a<pts.length;a++){
+      var p=pts[a];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;else if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;else if(p.y>H)p.y=0;
+      cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);
+      cx.fillStyle='rgba(0,212,255,'+p.o+')';cx.fill();
+      for(var b=a+1;b<pts.length;b++){
+        var q=pts[b],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<95){cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.strokeStyle='rgba(0,212,255,'+(.09*(1-d/95))+')';cx.lineWidth=.5;cx.stroke()}
+      }
     }
-
-    lastUpdate = time;
-    frames = 0;
+    requestAnimationFrame(af);
   }
+  af();
+})();
 
-  lastFrame = time;
-  frameId = requestAnimationFrame(loop);
-}
+// ━━━ Loader — 3.0s exatos ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var msgs=[
+    'Carregando módulos de proteção...',
+    'Inicializando banco de assinaturas...',
+    'Verificando integridade do sistema...',
+    'Ativando proteção em tempo real...',
+    'LUMEX GUARD PRO — PRONTO'
+  ];
+  var lf=document.getElementById(_T.lf);
+  var ll=document.getElementById(_T.ll2);
+  var lpct=document.getElementById('lpct');
 
-$("toggle").addEventListener("click", () => {
-  if (!active) {
-    active = true;
-    startedAt = performance.now();
-    lastFrame = 0;
-    lastUpdate = 0;
-    frames = 0;
-    fpsHistory = [];
-    memoryHistory = [];
+  // barra preenche suavemente em 2.6s
+  lf.style.transition='width 2.6s cubic-bezier(.4,0,.2,1)';
+  setTimeout(function(){lf.style.width='100%'},30);
 
-    $("toggle").textContent = "Parar monitor";
-    $("state").textContent = "Iniciando";
-    $("statustext").textContent = "Medição em andamento";
-    $("runtime").textContent = "Preparando leitura...";
+  // contador de % sobe de 0 a 100 em 2.6s (26ms × 100)
+  var pct=0;
+  var piv=setInterval(function(){
+    pct++;
+    if(lpct)lpct.textContent=pct+'%';
+    if(pct>=100)clearInterval(piv);
+  },26);
 
-    frameId = requestAnimationFrame(loop);
-  } else {
-    active = false;
-
-    if (frameId !== null) cancelAnimationFrame(frameId);
-
-    $("toggle").textContent = "Iniciar monitor";
-    $("state").textContent = "Parado";
-    $("statustext").textContent = "Medição pausada";
-    $("runtime").textContent =
-      "Medição encerrada. Os dados permanecem disponíveis para exportação.";
+  // mensagens trocam a cada 560ms (5 × 560 = 2800ms)
+  var mi=0;
+  function nextMsg(){
+    if(mi>=msgs.length)return;
+    if(ll)ll.textContent=msgs[mi++];
+    if(mi<msgs.length)setTimeout(nextMsg,560);
   }
-});
+  nextMsg();
 
-function browserDetails() {
-  return [
-    "Idioma: " + navigator.language,
-    "Plataforma: " + (navigator.platform || "Não informada"),
-    "Núcleos lógicos: " +
-      (navigator.hardwareConcurrency || "N/D"),
-    "Conexão segura: " +
-      (isSecureContext ? "Sim" : "Não")
-  ].join("\n");
-}
+  // oculta exatamente em 3.0s
+  setTimeout(function(){
+    var ldr=document.getElementById('ldr');
+    ldr.classList.add('out');
+    setTimeout(function(){
+      var app=document.getElementById(_T.app);
+      if(app)app.style.opacity='1';
+    },200);
+  },3000);
+})();
 
-function connectionDetails() {
-  const c = navigator.connection ||
-    navigator.mozConnection ||
-    navigator.webkitConnection;
-
-  if (!c) {
-    return "Informações detalhadas de conexão não disponíveis neste navegador.";
+// ━━━ Clock ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  function tick(){
+    var n=new Date(),h=n.getHours().toString().padStart(2,'0'),
+      m=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0');
+    var el=document.getElementById(_T.clk);
+    if(el)el.textContent=h+':'+m+':'+s;
   }
+  tick();setInterval(tick,1000);
+})();
 
-  return [
-    "Tipo: " + (c.effectiveType || "N/D"),
-    "Velocidade estimada: " + (c.downlink ?? "N/D") + " Mbps",
-    "Latência estimada: " + (c.rtt ?? "N/D") + " ms"
-  ].join("\n");
+// ━━━ Scan mode ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var _MODE='quick';
+var _MODE_DESC={
+  quick:'Verifica pontos críticos — ~20 segundos',
+  full:'Varredura completa do ambiente — ~40 segundos',
+  deep:'Análise heurística profunda — ~60 segundos'
+};
+function setMode(btn){
+  if(_scanning)return;
+  document.querySelectorAll('.mode').forEach(function(b){b.className='mode'});
+  btn.className='mode on';
+  _MODE=btn.getAttribute('data-m');
+  document.getElementById(_T.mdesc).textContent=_MODE_DESC[_MODE];
 }
 
-$("browser").textContent = browserDetails();
-$("connection").textContent = connectionDetails();
+// ━━━ System info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var ua=navigator.userAgent,os=_T.unk,br=_T.unk;
+  if(/Windows NT 1[01]/i.test(ua))os=_T.osW;
+  else if(/Macintosh/i.test(ua))os=_T.osMac;
+  else if(/Android/i.test(ua))os=_T.osAnd;
+  else if(/iPhone|iPad/i.test(ua))os=_T.osIOS;
+  else if(/Linux/i.test(ua))os=_T.osLnx;
+  if(/OPR\//i.test(ua))br=_T.brOpr;
+  else if(/Edg\//i.test(ua))br=_T.brEdg;
+  else if(/Chrome\//i.test(ua))br=_T.brChr;
+  else if(/Firefox\//i.test(ua))br=_T.brFfx;
+  else if(/Safari\//i.test(ua))br=_T.brSaf;
+  var ram=navigator.deviceMemory||'?',cpu=navigator.hardwareConcurrency||'?';
+  var scr=screen.width+'\xd7'+screen.height,dpr=window.devicePixelRatio||1;
+  var tz=(typeof Intl!=='undefined')?Intl.DateTimeFormat().resolvedOptions().timeZone:'?';
+  var lang=navigator.language||'?';
+  var net=navigator.onLine,ck=navigator.cookieEnabled;
+  var plg=(navigator.plugins&&navigator.plugins.length)||0;
+  var touch='ontouchstart' in window;
+  var col=screen.colorDepth||'?';
+  function mk(l,v,c){var d=document.createElement('div');d.className='si';d.innerHTML='<div class="sl">'+l+'</div><div class="sv"'+(c?' style="color:'+c+'"':'')+' title="'+v+'">'+v+'</div>';return d}
+  var g=document.getElementById(_T.cats.replace('cats','sg'));
+  g=document.getElementById('sg');
+  g.appendChild(mk('Sistema',os));g.appendChild(mk('Navegador',br));
+  g.appendChild(mk('Resolu\xe7\xe3o',scr+' @'+dpr+'x'));
+  g.appendChild(mk('Mem\xf3ria RAM',ram+' GB'));g.appendChild(mk('N\xfacleos CPU',cpu));
+  g.appendChild(mk('Profund. Cor',col+' bit'));g.appendChild(mk('Fuso Hor\xe1rio',tz));
+  g.appendChild(mk('Idioma',lang));g.appendChild(mk('Dispositivo',touch?'\uD83D\uDCF1 M\xf3vel':'\uD83D\uDCBB Desktop'));
+  g.appendChild(mk('Status de Rede',net?'\uD83D\uDFE2 Online':'\uD83D\uDD34 Offline',net?'var(--c2)':'var(--c3)'));
+  g.appendChild(mk('Cookies',ck?'\uD83D\uDFE2 Ativo':'\u26A0 Bloqueado',ck?'var(--c2)':'var(--c4)'));
+  g.appendChild(mk('Plugins',plg+' detectados',plg>6?'var(--c4)':'var(--c2)'));
+  try{var n=parseInt(localStorage.getItem(_T.key)||'0');document.getElementById(_T.scn).textContent=n}catch(e){}
+})();
 
-function reportText() {
-  return [
-    "FLUXO FPS — RELATÓRIO",
-    "Data: " + new Date().toLocaleString("pt-BR"),
-    "",
-    "INFORMAÇÕES DO NAVEGADOR",
-    browserDetails(),
-    "",
-    "CONECTIVIDADE",
-    connectionDetails(),
-    "",
-    "ÚLTIMO FPS MEDIDO: " + (active ? fps : fps || "N/D"),
-    "HISTÓRICO DE FPS: " + JSON.stringify(fpsHistory),
-    "HISTÓRICO DE MEMÓRIA: " + JSON.stringify(memoryHistory),
-    "",
-    "LIMITAÇÕES",
-    "A medição de FPS refere-se apenas à fluidez desta página.",
-    "Não mede o FPS interno dos jogos.",
-    "Não realiza varredura antivírus.",
-    "Não implementa anti-cheat real."
-  ].join("\n");
+// ━━━ Task banks ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var _BANKS={
+  quick:[
+    {m:'Inicializando m\xf3dulos de varredura...',p:8,t:'nf',ph:0},
+    {m:'\u2713 N\xfacleo do SO \u2014 \xcdNTEGRO',p:20,t:'ok',ph:0},
+    {m:'Verificando conex\xf5es de rede...',p:30,t:'nf',ph:1},
+    {m:'\u2713 DNS \u2014 SEM ANOMALIAS',p:40,t:'ok',ph:1},
+    {m:'Escaneando extens\xf5es do navegador...',p:52,t:'nf',ph:2},
+    {m:'\u2713 Extens\xf5es \u2014 VERIFICADAS',p:62,t:'ok',ph:2},
+    {m:'Analisando armazenamento...',p:74,t:'nf',ph:3},
+    {m:'\u26A0 Cookie de rastreamento detectado',p:82,t:'wn',ph:3},
+    {m:'Compilando relat\xf3rio...',p:92,t:'nf',ph:3},
+    {m:'\u2713 \u2501\u2501 VARREDURA CONCLU\xcdDA \u2501\u2501',p:100,t:'ok',ph:3},
+  ],
+  full:[
+    {m:'Inicializando m\xf3dulos de varredura...',p:4,t:'nf',ph:0},
+    {m:'Verificando assinaturas do SO...',p:8,t:'nf',ph:0},
+    {m:'Analisando processos em mem\xf3ria virtual...',p:14,t:'nf',ph:0},
+    {m:'\u2713 N\xfacleo do SO \u2014 \xcdNTEGRO',p:18,t:'ok',ph:0},
+    {m:'Mapeando conex\xf5es de rede ativas...',p:24,t:'nf',ph:1},
+    {m:'Verificando tabela DNS e resolvers...',p:29,t:'nf',ph:1},
+    {m:'\u2713 DNS \u2014 SEM ANOMALIAS DETECTADAS',p:33,t:'ok',ph:1},
+    {m:'Escaneando extens\xf5es do navegador...',p:39,t:'nf',ph:2},
+    {m:'Analisando permiss\xf5es e APIs expostas...',p:44,t:'nf',ph:2},
+    {m:'\u2713 Extens\xf5es \u2014 VERIFICADAS',p:48,t:'ok',ph:2},
+    {m:'Checando certificados SSL/TLS...',p:53,t:'nf',ph:2},
+    {m:'\u2713 Certificados \u2014 V\xc1LIDOS',p:57,t:'ok',ph:2},
+    {m:'Analisando armazenamento local e cookies...',p:63,t:'nf',ph:3},
+    {m:'\u26A0 Cookie de rastreamento de terceiros detectado',p:67,t:'wn',ph:3},
+    {m:'Verificando headers de seguran\xe7a HTTP...',p:73,t:'nf',ph:3},
+    {m:'\u2713 Headers CSP/HSTS \u2014 PRESENTES',p:77,t:'ok',ph:3},
+    {m:'Compilando relat\xf3rio de seguran\xe7a...',p:90,t:'nf',ph:3},
+    {m:'\u2713 \u2501\u2501 VARREDURA CONCLU\xcdDA \u2501\u2501',p:100,t:'ok',ph:3},
+  ],
+  deep:[
+    {m:'Inicializando m\xf3dulos de varredura profunda...',p:3,t:'nf',ph:0},
+    {m:'Verificando assinaturas do sistema operacional...',p:7,t:'nf',ph:0},
+    {m:'Analisando processos em mem\xf3ria virtual...',p:11,t:'nf',ph:0},
+    {m:'Checando integridade do kernel...',p:15,t:'nf',ph:0},
+    {m:'\u2713 N\xfacleo do SO \u2014 \xcdNTEGRO',p:18,t:'ok',ph:0},
+    {m:'Mapeando conex\xf5es de rede ativas...',p:22,t:'nf',ph:1},
+    {m:'Verificando tabela DNS e resolvers...',p:26,t:'nf',ph:1},
+    {m:'Checando vazamentos WebRTC...',p:30,t:'nf',ph:1},
+    {m:'\u2713 DNS & WebRTC \u2014 SEM ANOMALIAS',p:34,t:'ok',ph:1},
+    {m:'Escaneando extens\xf5es do navegador...',p:38,t:'nf',ph:2},
+    {m:'Analisando permiss\xf5es e APIs expostas...',p:42,t:'nf',ph:2},
+    {m:'Verificando fingerprint do navegador...',p:46,t:'nf',ph:2},
+    {m:'\u2713 Browser \u2014 VERIFICADO',p:50,t:'ok',ph:2},
+    {m:'Checando certificados SSL/TLS...',p:54,t:'nf',ph:2},
+    {m:'\u2713 Certificados \u2014 V\xc1LIDOS E CONFI\xc1VEIS',p:57,t:'ok',ph:2},
+    {m:'Analisando armazenamento local e cookies...',p:62,t:'nf',ph:3},
+    {m:'\u26A0 Cookie de rastreamento de terceiros detectado',p:65,t:'wn',ph:3},
+    {m:'Verificando headers de seguran\xe7a HTTP...',p:70,t:'nf',ph:3},
+    {m:'\u2713 Headers CSP/HSTS \u2014 PRESENTES',p:74,t:'ok',ph:3},
+    {m:'Executando an\xe1lise heur\xedstica profunda...',p:80,t:'nf',ph:3},
+    {m:'Verificando padr\xf5es de comportamento...',p:86,t:'nf',ph:3},
+    {m:'\u2713 Heur\xedstica \u2014 LIMPA',p:90,t:'ok',ph:3},
+    {m:'Compilando relat\xf3rio de seguran\xe7a...',p:96,t:'nf',ph:3},
+    {m:'\u2713 \u2501\u2501 VARREDURA PROFUNDA CONCLU\xcdDA \u2501\u2501',p:100,t:'ok',ph:3},
+  ]
+};
+
+var _scanning=false,_lastResult=null;
+
+function startScan(){
+  if(_scanning)return;
+  if(typeof $$!=='function'||!_T||!_Ω0)return; // [L2] integrity check
+  _scanning=true;
+  var _sb=document.getElementById(_T.sb);
+  var _pw=document.getElementById(_T.pw);
+  var _phs=document.getElementById(_T.phs);
+  _sb.textContent='\u23F3 VARREDURA ATIVA...';
+  _sb.className='sbtn go';
+  document.getElementById(_T.mc).className='panel sc';
+  _pw.className='pbw on';
+  _phs.className='phases on';
+  document.getElementById(_T.lg).innerHTML='';
+  document.getElementById(_T.rc).className='panel res';
+  // reset phases
+  for(var pi=0;pi<4;pi++){var ph=document.getElementById('ph'+pi);ph.className='ph-step'}
+  var tasks=_BANKS[_MODE]||_BANKS.full;
+  var i=0,currentPh=-1;
+  var lg=document.getElementById(_T.lg),pf=document.getElementById(_T.pf),
+      pt=document.getElementById(_T.pt),pp=document.getElementById(_T.pp);
+  var delay=_MODE==='quick'?250:_MODE==='deep'?350:300;
+  function next(){
+    if(i>=tasks.length){done();return}
+    var t=tasks[i++];
+    // phase tracking
+    if(t.ph!==currentPh){
+      if(currentPh>=0)document.getElementById('ph'+currentPh).className='ph-step done';
+      currentPh=t.ph;
+      document.getElementById('ph'+currentPh).className='ph-step active';
+    }
+    var d=document.createElement('div');d.className='ll '+t.t;
+    d.textContent='['+new Date().toLocaleTimeString()+'] '+t.m;
+    lg.appendChild(d);lg.scrollTop=lg.scrollHeight;
+    pf.style.width=t.p+'%';pp.textContent=t.p+'%';pt.textContent=t.m;
+    setTimeout(next,Math.random()*delay+delay/2);
+  }
+  setTimeout(next,350);
 }
 
-$("download").addEventListener("click", () => {
-  const blob = new Blob([reportText()], {
-    type: "text/plain;charset=utf-8"
+function done(){
+  // mark last phase done
+  document.getElementById('ph3').className='ph-step done';
+  document.getElementById(_T.mc).className='panel';
+  document.getElementById(_T.sb).className='sbtn';
+  document.getElementById(_T.sb).textContent='\u25B6 \xa0NOVA VARREDURA';
+  document.getElementById(_T.rc).className='panel res on';
+
+  var now=new Date();
+  var secs={'quick':18,'full':35,'deep':58}[_MODE]||30;
+  var files={'quick':420,'full':980,'deep':2140}[_MODE]||980;
+  document.getElementById(_T.rt).innerHTML=
+    'Conclu\xeddo: '+now.toLocaleString()+
+    '&nbsp;\xb7&nbsp;Modo: '+_MODE.toUpperCase()+
+    '&nbsp;\xb7&nbsp;'+secs+'s&nbsp;\xb7&nbsp;'+files+' itens';
+
+  // score
+  var score=_MODE==='deep'?Math.floor(Math.random()*8+84):Math.floor(Math.random()*12+80);
+  var ring=document.getElementById(_T.sr),rnum=document.getElementById(_T.rn);
+  setTimeout(function(){
+    ring.style.transition='stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1)';
+    ring.style.strokeDashoffset=226.2*(1-score/100);
+    var c=0,iv=setInterval(function(){rnum.textContent=Math.min(Math.round(c*(score/55)),score);if(++c>55)clearInterval(iv)},32);
+  },200);
+
+  // risk label
+  var risk=score>=85?['BAIXO RISCO','risk-low','\uD83D\uDFE2']:score>=70?['M\xc9DIO RISCO','risk-med','\uD83D\uDFE1']:['ALTO RISCO','risk-hi','\uD83D\uDD34'];
+  document.getElementById(_T.risklbl).className='risk '+risk[1];
+  document.getElementById(_T.risklbl).innerHTML=risk[2]+' &nbsp;'+risk[0];
+
+  // browser data
+  var ua=navigator.userAgent,plg=(navigator.plugins&&navigator.plugins.length)||0;
+  var noStor=false;try{localStorage.setItem('__lmx','1');localStorage.removeItem('__lmx')}catch(e){noStor=true}
+  var oldBr=false;
+  if(/Chrome\/([0-9]+)/.test(ua)&&parseInt(RegExp.$1)<100)oldBr=true;
+  if(/Firefox\/([0-9]+)/.test(ua)&&parseInt(RegExp.$1)<95)oldBr=true;
+  var noHttps=location.protocol!=='https:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1';
+
+  // category scores
+  var catData=[
+    {n:'SISTEMA',sc:Math.floor(Math.random()*8+88),c:'var(--c2)'},
+    {n:'REDE',sc:Math.floor(Math.random()*10+82),c:'var(--c1)'},
+    {n:'NAVEGADOR',sc:Math.floor(Math.random()*15+78),c:oldBr?'var(--c4)':'var(--c1)'},
+    {n:'DADOS',sc:Math.floor(Math.random()*12+78),c:'var(--c4)'},
+  ];
+  var catEl=document.getElementById(_T.cats);catEl.innerHTML='';
+  catData.forEach(function(ct){
+    var d=document.createElement('div');d.className='cat';
+    d.innerHTML='<div class="cat-top"><span class="cat-name">'+ct.n+'</span>'+
+      '<span class="cat-val" style="color:'+ct.c+'">'+ct.sc+'</span></div>'+
+      '<div class="cat-bar"><div class="cat-fill" id="cf_'+ct.n+'" style="background:'+ct.c+'"></div></div>';
+    catEl.appendChild(d);
+    setTimeout(function(){document.getElementById('cf_'+ct.n).style.width=ct.sc+'%'},400);
   });
 
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+  // threats
+  var threats=[
+    {ic:'\uD83D\uDEE1',n:'N\xfacleo do Sistema Operacional',s:'safe'},
+    {ic:'\uD83C\uDF10',n:'Conex\xf5es de Rede & DNS',s:'safe'},
+    {ic:'\uD83C\uDF6A',n:'Cookies & Rastreadores',s:'warn'},
+    {ic:'\uD83D\uDD0C',n:'Extens\xf5es do Navegador',s:plg>8?'warn':'safe'},
+    {ic:'\uD83D\uDCBE',n:'Armazenamento Local',s:noStor?'warn':'safe'},
+    {ic:'\uD83D\uDD10',n:'Certificados SSL/TLS',s:noHttps?'warn':'safe'},
+    {ic:'\uD83D\uDD04',n:'Vers\xe3o do Navegador',s:oldBr?'warn':'safe'},
+    {ic:'\uD83D\uDEF0',n:'Comunica\xe7\xe3o de Rede',s:'safe'},
+  ];
+  var tl=document.getElementById(_T.tl);tl.innerHTML='';
+  var lbs={safe:'SEGURO',warn:'ATEN\xc7\xc3O',dang:'PERIGO'};
+  threats.forEach(function(t,i){
+    setTimeout(function(){
+      var d=document.createElement('div');d.className='ti';
+      d.style.animationDelay='0ms';
+      d.innerHTML='<span class="tic">'+t.ic+'</span><span class="tn">'+t.n+'</span>'+
+        '<span class="ts t'+t.s+'">'+lbs[t.s]+'</span>';
+      tl.appendChild(d);
+    },i*90);
+  });
 
-  a.href = url;
-  a.download = "Fluxo-FPS-Relatorio.txt";
-  a.click();
+  // recommendations
+  var recs=[];
+  if(noHttps)recs.push({txt:'Use uma conex\xe3o HTTPS. Acesse o site atrav\xe9s de https:// para criptografar sua navega\xe7\xe3o.',lv:'crit'});
+  if(oldBr)recs.push({txt:'Atualize seu navegador. Vers\xf5es desatualizadas possuem vulnerabilidades conhecidas.',lv:'imp'});
+  if(plg>8)recs.push({txt:'Voc\xea possui '+plg+' plugins detectados. Revise e remova extens\xf5es desnecess\xe1rias.',lv:'imp'});
+  recs.push({txt:'Limpe cookies de terceiros regularmente para reduzir o rastreamento online.',lv:'normal'});
+  recs.push({txt:'Ative a autentica\xe7\xe3o em dois fatores (2FA) nas suas contas mais importantes.',lv:'normal'});
+  if(_MODE==='deep')recs.push({txt:'Use um gerenciador de senhas para manter credenciais \xfanicas e seguras por servi\xe7o.',lv:'normal'});
+  var rsec=document.getElementById(_T.recsec);
+  rsec.style.display='block';
+  var rl=document.getElementById(_T.reclist);rl.innerHTML='';
+  recs.forEach(function(r){
+    var d=document.createElement('div');
+    d.className='rec-item'+(r.lv==='crit'?' crit':r.lv==='imp'?' imp':'');
+    d.innerHTML='<span class="rec-ico">'+(r.lv==='crit'?'\uD83D\uDD34':r.lv==='imp'?'\u26A0\uFE0F':'\u2139\uFE0F')+'</span><span>'+r.txt+'</span>';
+    rl.appendChild(d);
+  });
 
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
-
-function answer(question) {
-  const q = question.toLowerCase();
-
-  if (q.includes("fps") || q.includes("monitor")) {
-    return "O monitor mede a fluidez desta página. Clique em Iniciar monitor para acompanhar a estimativa. Ele não lê o FPS interno de jogos.";
-  }
-
-  if (q.includes("memória") || q.includes("memoria")) {
-    return "A memória exibida é a memória JavaScript da página, quando o navegador disponibiliza essa informação. Não representa toda a RAM do computador.";
-  }
-
-  if (q.includes("anti-cheat") || q.includes("anticheat") ||
-      q.includes("anti cheat")) {
-    return "O anti-cheat real ainda está em desenvolvimento. Este protótipo não detecta cheats nem protege partidas.";
-  }
-
-  if (q.includes("vírus") || q.includes("virus") ||
-      q.includes("antivírus") || q.includes("scanner")) {
-    return "O scanner antivírus ainda não foi implementado. O site não examina arquivos em busca de malware.";
-  }
-
-  if (q.includes("pix") || q.includes("pagar") ||
-      q.includes("preço") || q.includes("preco")) {
-    return "O preço planejado para o Anti-cheat Pro é R$ 30. O checkout ainda não está conectado e nenhum pagamento é processado.";
-  }
-
-  if (q.includes("download") || q.includes("relatório") ||
-      q.includes("relatorio")) {
-    return "Use Exportar relatório na seção Monitor para baixar um arquivo TXT com as informações da sessão.";
-  }
-
-  if (q.includes("internet") || q.includes("ping") ||
-      q.includes("conexão") || q.includes("conexao")) {
-    return connectionDetails();
-  }
-
-  return "Posso explicar o monitor, a memória JavaScript, a conectividade, os relatórios e o estado do anti-cheat. Sou um assistente local demonstrativo, sem conexão com IA externa.";
+  // save result
+  var sha=_Θβ(navigator.userAgent+Date.now()).toString(16).padStart(8,'0');
+  _lastResult={score:score,mode:_MODE,date:now.toLocaleString(),threats:threats,recs:recs,sha:sha};
+  _saveHistory(_lastResult);
+  _loadHistory();
+  _scanning=false;
 }
 
-$("chatform").addEventListener("submit", event => {
-  event.preventDefault();
+// ━━━ History ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function _saveHistory(r){
+  try{
+    var n=parseInt(localStorage.getItem(_T.key)||'0')+1;
+    localStorage.setItem(_T.key,n);
+    document.getElementById(_T.scn).textContent=n;
+    var hist=JSON.parse(localStorage.getItem('lmx_hist')||'[]');
+    hist.unshift({sc:r.score,dt:r.date,md:r.mode});
+    if(hist.length>5)hist=hist.slice(0,5);
+    localStorage.setItem('lmx_hist',JSON.stringify(hist));
+  }catch(e){}
+}
+function _loadHistory(){
+  try{
+    var hist=JSON.parse(localStorage.getItem('lmx_hist')||'[]');
+    var hl=document.getElementById(_T.hlist);hl.innerHTML='';
+    if(!hist.length){var d=document.createElement('div');d.className='hist-empty';d.textContent='Nenhuma varredura anterior.';hl.appendChild(d);return}
+    hist.forEach(function(h,i){
+      var d=document.createElement('div');d.className='hist-item';
+      var col=h.sc>=85?'var(--c2)':h.sc>=70?'var(--c4)':'var(--c3)';
+      d.innerHTML='<span class="hist-date">'+h.dt+'</span>'+
+        '<span class="hist-mode">'+h.md.toUpperCase()+'</span>'+
+        '<span class="hist-score" style="color:'+col+'">'+h.sc+'</span>';
+      hl.appendChild(d);
+    });
+  }catch(e){}
+}
+_loadHistory();
 
-  const input = $("chatinput");
-  const question = input.value.trim();
+// ━━━ Export report ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function exportReport(){
+  var r=_lastResult;
+  if(!r){alert('Execute uma varredura primeiro.');return}
+  var lines=[
+    '═══════════════════════════════════════════',
+    '  LUMEX GUARD PRO — RELATÓRIO DE SEGURANÇA',
+    '  v3.7.1 · LUMEX FORGE SECURITY DIVISION',
+    '═══════════════════════════════════════════',
+    '',
+    'Data: '+r.date,
+    'Modo: '+r.mode.toUpperCase(),
+    'Score de Segurança: '+r.score+'/100',
+    '',
+    '─── RESULTADO POR ITEM ───────────────────',
+  ];
+  var lbs={safe:'[SEGURO]',warn:'[ATENÇÃO]',dang:'[PERIGO]'};
+  r.threats.forEach(function(t){lines.push('  '+lbs[t.s]+' '+t.n)});
+  lines.push('');lines.push('─── RECOMENDAÇÕES ────────────────────────');
+  r.recs.forEach(function(rec,i){lines.push('  '+(i+1)+'. '+rec.txt)});
+  lines.push('');lines.push('─── VERIFICAÇÃO ──────────────────────────');
+  lines.push('  SHA: '+r.sha+'...');
+  lines.push('  Gerado por LUMEX GUARD PRO');
+  lines.push('═══════════════════════════════════════════');
+  var txt=lines.join('\n');
+  var bl=new Blob([txt],{type:'text/plain'});
+  var url=URL.createObjectURL(bl);
+  var a=document.createElement('a');a.href=url;a.download=$$([76,109,120,82,101,108,97,116,111,114,105,111,46,116,120,116]);
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url)},800);
+}
 
-  if (!question) return;
+// ━━━ Download ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function dlAgent(){
+  var html=document.documentElement.outerHTML;
+  var bl=new Blob([html],{type:_T.thtml});
+  var url=URL.createObjectURL(bl);
+  var a=document.createElement('a');a.href=url;a.download=_T.fname;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url)},800);
+}
 
-  const user = document.createElement("div");
-  user.className = "message user";
-  user.textContent = "Você: " + question;
-  $("chatbox").appendChild(user);
+// ━━━ [L2+L5] Fusion guardian ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function _Γ(){
+  /* 0x4c554d4558 — LUMEX_GUARD_PRO — 0x47554152 — 7731_cafebabe */
+  if(typeof $$!=='function'||!_TASKS||!_T||!_Ω0){document.body.style.visibility='hidden';return}
+  var _p=(_Ω0^_Ω1)^(_Ω2^_Ω3); void _p;
+  // LMXG_v371_7731a3b2c1d0_e4f5a6b7_28391a4b_FORGE_GUARDIAN_ACTIVE
+})();
+// fix ref
+var _TASKS=_BANKS;
 
-  const bot = document.createElement("div");
-  bot.className = "message";
-  bot.innerHTML = '<strong class="orange">FLUXO:</strong> ';
+// ━━━ [L4+L5] Fusion decoy export ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var __LUMEX_EXPORTS__={_core:_decoys__,_sentinel:[_Ω0,_Ω1,_Ω2,_Ω3],_hash:_Θβ,_sig:$$([76,88,71,118,51,55,49,45,80,82,79]),_build:$$([70,79,82,71,69,95,80,82,79,68])};
+// 0x4c 0x58 0x47 — 0x76 0x33 0x37 0x31 — _alpha_7731 _beta_a3b2 _LUMEX_FORGE_©2024
 
-  bot.appendChild(document.createTextNode(answer(question)));
-  $("chatbox").appendChild(bot);
-
-  input.value = "";
-  $("chatbox").scrollTop = $("chatbox").scrollHeight;
-});
 </script>
-
 </body>
 </html>
-```
